@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Title of the page -->
+        <title>View Books</title>
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <!-- Heading -->
+        <h1>Books</h1>
+        <!-- Create Button -->
+        <div> 
+            <button id="showCreateButton" onclick="showCreate()">Create</button>
+        </div>
+        <!-- Table to display books -->
+        <div>
+            <table class="table" id="bookTable">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Price</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </table>
+        </div>
+        <!-- Form to create/update a book -->
+        <div id='createUpdateForm' style="display: none">
+            <h2><span id="createLabel">Create a</span> <span id="updateLabel">update</span> Book</h2>
+            <input type="hidden" name="id"/>
+            Title <input type="text" name="title" /><br/>
+            Author <input type="text" name="author"/> <br/>
+            Price <input type="number" name="price"/> <br/>
+            <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
+            <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+        </div>
+    </body>
+    <script>
+        // Function to display the form for creating a new book
+        function showCreate(){
+            // Hide elements
+            document.getElementById('showCreateButton').style.display="none"
+            document.getElementById('bookTable').style.display="none"
+            // Show form
+            document.getElementById('createUpdateForm').style.display="block"
+            // Set appropriate labels
+            document.getElementById('createLabel').style.display="inline"
+            document.getElementById('updateLabel').style.display="none"
+            // Show create button, hide update button
+            document.getElementById('doCreateButton').style.display="block"
+            document.getElementById('doUpdateButton').style.display="none"
+        }
+
+        // Function to display all books and show create button
+        function showViewAll(){
+            document.getElementById('showCreateButton').style.display="block"
+            document.getElementById('bookTable').style.display="block"
+            document.getElementById('createUpdateForm').style.display="none"
+        }
+
+        // Function to display the form for updating a book
+        function showUpdate(buttonElement){
+            document.getElementById('showCreateButton').style.display="none"
+            document.getElementById('bookTable').style.display="none"
+            document.getElementById('createUpdateForm').style.display="block"
+            // Set appropriate labels
+            document.getElementById('createLabel').style.display="none"
+            document.getElementById('updateLabel').style.display="inline"
+            // Show update button, hide create button
+            document.getElementById('doCreateButton').style.display="none"
+            document.getElementById('doUpdateButton').style.display="block"
+
+            // Get book details from the row
+            var rowElement = buttonElement.parentNode.parentNode
+            var book = getBookFromRow(rowElement)
+            populateFormWithBook(book)
+        }
+
+        // Function to create a new book
+        function doCreate(){
+            var form = document.getElementById('createUpdateForm')
+            var book = {}
+            book.title = form.querySelector('input[name="title"]').value
+            book.author = form.querySelector('input[name="author"]').value
+            book.price = form.querySelector('input[name="price"]').value
+            createBookAjax(book)
+        }
+
+        // Function to update a book
+        function doUpdate(){
+            var book = getBookFromForm();
+            var rowElement = document.getElementById(book.id);
+            updateBookAjax(book);
+            setBookInRow(rowElement,book);
+            clearForm();
+            showViewAll();
+        }
+
+        // Function to delete a book
+        function doDelete(r){
+            var tableElement = document.getElementById('bookTable');
+            var rowElement = r.parentNode.parentNode;
+            var index = rowElement.rowIndex;
+            deleteBookAjax(rowElement.getAttribute("id"));
+            tableElement.deleteRow(index);
+        }
+
+        // Function to add a book to the table
+        function addBookToTable(book){
+            var tableElement = document.getElementById('bookTable')
+            var rowElement = tableElement.insertRow(-1)
+            rowElement.setAttribute('id',book.id)
+            // Insert cells for each attribute
+            var cell1 = rowElement.insertCell(0);
+            cell1.innerHTML = book.id
+            var cell2 = rowElement.insertCell(1);
+            cell2.innerHTML = book.title
+            var cell3 = rowElement.insertCell(2);
+            cell3.innerHTML = book.author
+            var cell4 = rowElement.insertCell(3);
+            cell4.innerHTML = book.price
+            var cell5 = rowElement.insertCell(4);
+            cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+            var cell6 = rowElement.insertCell(5);
+            cell6.innerHTML = '<button onclick=doDelete(this)>Delete</button>'
+        }
+
+        // Function to clear the form
+        function clearForm(){
+            var form = document.getElementById('createUpdateForm')
+            form.querySelector('input[name="title"]').value=''
+            form.querySelector('input[name="author"]').value=''
+            form.querySelector('input[name="price"]').value=''
+        }
+
+        // Function to extract book details from a row
+        function getBookFromRow(rowElement){
+            var book = {}
+            book.id  = rowElement.getAttribute('id')
+            book.title = rowElement.cells[1].firstChild.textContent
+            book.author = rowElement.cells[2].firstChild.textContent
+            book.price = parseInt(rowElement.cells[3].firstChild.textContent,10)
+            return book
+        }
+
+        // Function to set book details in a row
+        function setBookInRow(rowElement, book){
+            rowElement.cells[0].firstChild.textContent= book.id  
+            rowElement.cells[1].firstChild.textContent= book.title 
+            rowElement.cells[2].firstChild.textContent= book.author
+            rowElement.cells[3].firstChild.textContent= book.price
+        }
+
+        // Function to populate the form with book details
+        function populateFormWithBook(book){
+            var form = document.getElementById('createUpdateForm')
+            form.querySelector('input[name="id"]').disabled = true
+            form.querySelector('input[name="id"]').value  = book.id
+            form.querySelector('input[name="title"]').value= book.title
+            form.querySelector('input[name="author"]').value= book.author
+            form.querySelector('input[name="price"]').value= book.price
+            return book
+        }
+
+        // Function to extract book details from the form
+        function getBookFromForm(){
+            var form = document.getElementById('createUpdateForm')
+            var book = {}
+            book.id = form.querySelector('input[name="id"]').value
+            book.title = form.querySelector('input[name="title"]').value
+            book.author = form.querySelector('input[name="author"]').value
+            book.price = parseInt(form.querySelector('input[name="price"]').value,10)
+            return book
+        }
+
+        // Function to retrieve all books via AJAX
+        function getAllAjax(){
+            $.ajax({
+                "url": "/books",
+                "method":"GET",
+                "data":"",
+                "dataType": "JSON",
+                "success":function(result){
+                    // Add each book to the table
+                    for (book of result){
+                        addBookToTable(book);
+                    }
+                },
+                "error":function(xhr,status,error){
+                    console.log("error: "+status+" msg:"+error);
+                }
+            });
+        }
+
+        // Function to create a new book via AJAX
+        function createBookAjax(book){
+            $.ajax({
+                "url": "/books",
+                "method":"POST",
+                "data":JSON.stringify(book),
+                "dataType": "JSON",
+                contentType: "application/json; charset=utf-8",
+                "success":function(result){
+                    book.id = result.id
+                    // Add the new book to the table
+                    addBookToTable(book)
+                    clearForm()
+                    showViewAll()
+                },
+                "error":function(xhr,status,error){
+                    console.log("error: "+status+" msg:"+error);
+                }
+            });
+        }
+
+        // Function to update a book via AJAX
+        function updateBookAjax(book){
+            $.ajax({
+                "url": "/books/"+encodeURI(book.id),
+                "method":"PUT",
+                "data":JSON.stringify(book),
+                "dataType": "JSON",
+                contentType: "application/json; charset=utf-8",
+                "success":function(result){
+                    // Update successful
+                },
+                "error":function(xhr,status,error){
+                    console.log("error: "+status+" msg:"+error);
+                }
+            });
+        }
+
+        // Function to delete a book via AJAX
+        function deleteBookAjax(id){
+            $.ajax({
+                "url": "/books/"+encodeURI(id),
+                "method":"DELETE",
+                "data":"",
+                "dataType": "JSON",
+                contentType: "application/json; charset=utf-8",
+                "success":function(result){
+                    // Delete successful
+                },
+                "error":function(xhr,status,error){
+                    console.log("error: "+status+" msg:"+error);
+                }
+            });
+        }
+
+        // Initial call to retrieve all books
+        getAllAjax();
+    </script>
+</html>
