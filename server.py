@@ -45,4 +45,4 @@ def delete_recipe(recipe_id):
     return jsonify({'message': 'Recipe deleted successfully'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
