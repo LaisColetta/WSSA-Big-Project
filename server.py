@@ -1,32 +1,48 @@
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
-from config import Config as cfg
+from flask import Flask, render_template, request, jsonify, abort
+from recipesDAO import recipesDAO
+
 
 app = Flask(__name__)
-app.config.from_object(cfg)  # Load configuration from config.py
-db = SQLAlchemy(app)
 
-class Recipe(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    ingredients = db.Column(db.Text, nullable=False)
-    instructions = db.Column(db.Text, nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-
-    def __repr__(self):
-        return f"<Recipe {self.id} - {self.title}>"
-
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-
-    def __repr__(self):
-        return f"<Category {self.id} - {self.name}>"
-
+# Routes for web interface
 @app.route('/')
 def index():
-    recipes = Recipe.query.all()
-    return render_template('index.html', recipes=recipes)
+    return render_template('index.html')
+
+# Routes for REST API
+@app.route('/api/recipes', methods=['GET'])
+def get_recipes():
+    recipes = recipesDAO.get_all()
+    return jsonify(recipes)
+
+@app.route('/api/recipes', methods=['POST'])
+def create_recipe():
+    data = request.json
+    if not data or 'name' not in data or 'ingredients' not in data or 'instructions' not in data:
+        abort(400)
+    new_recipe_id = recipesDAO.create((data['name'], data['ingredients'], data['instructions']))
+    return jsonify({'message': 'Recipe created successfully', 'id': new_recipe_id}), 201
+
+@app.route('/api/recipes/<int:recipe_id>', methods=['GET'])
+def get_recipe(recipe_id):
+    recipe = recipesDAO.find_by_id(recipe_id)
+    if recipe:
+        return jsonify(recipe)
+    else:
+        abort(404)
+
+@app.route('/api/recipes/<int:recipe_id>', methods=['PUT'])
+def update_recipe(recipe_id):
+    data = request.json
+    if not data or 'name' not in data or 'ingredients' not in data or 'instructions' not in data:
+        abort(400)
+    recipesDAO.update((data['name'], data['ingredients'], data['instructions'], recipe_id))
+    return jsonify({'message': 'Recipe updated successfully'})
+
+@app.route('/api/recipes/<int:recipe_id>', methods=['DELETE'])
+def delete_recipe(recipe_id):
+    recipesDAO.delete(recipe_id)
+    return jsonify({'message': 'Recipe deleted successfully'})
 
 if __name__ == '__main__':
     app.run(debug=True)

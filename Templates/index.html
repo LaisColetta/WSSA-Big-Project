@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recipes</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        body {
+            background-color: #DBF9FC;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid;
+        }
+
+        header,
+        nav,
+        section,
+        footer {
+            margin: 20px;
+            padding: 20px;
+            border: 5px solid #E7A8F2;
+            border-radius: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <h1>Recipes</h1>
+    </header>
+
+    <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
+
+    <div>
+        <table class="table" id="recipeTable" style="background-color:#E7A8F2">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Ingredients</th>
+                <th>Instructions</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+
+            <!-- Recipe rows will be dynamically added here -->
+
+        </table>
+
+    </div>
+    <div id='createUpdateForm' style="display: none">
+        <h2><span id="createLabel">Create a</span> <span id="updateLabel">Update</span> Recipe</h2>
+        <input type="hidden" name="id" />
+        Name <input type="text" name="name" /><br />
+        Ingredients <input type="text" name="ingredients" /> <br />
+        Instructions <input type="text" name="instructions" /> <br />
+        <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
+        <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+        <span><button id="doCancelButton" onclick="window.location.reload()">Cancel</button></span>
+    </div>
+
+    <script>
+        function showCreate() {
+            document.getElementById('showCreateButton').style.display = "none";
+            document.getElementById('recipeTable').style.display = "none";
+            document.getElementById('createUpdateForm').style.display = "block";
+
+            document.getElementById('createLabel').style.display = "inline";
+            document.getElementById('updateLabel').style.display = "none";
+
+            document.getElementById('doCreateButton').style.display = "block";
+            document.getElementById('doUpdateButton').style.display = "none";
+        }
+
+        function showViewAll() {
+            document.getElementById('showCreateButton').style.display = "block";
+            document.getElementById('recipeTable').style.display = "block";
+            document.getElementById('createUpdateForm').style.display = "none";
+        }
+
+        function showUpdate(buttonElement) {
+            document.getElementById('showCreateButton').style.display = "none";
+            document.getElementById('recipeTable').style.display = "none";
+            document.getElementById('createUpdateForm').style.display = "block";
+
+            document.getElementById('createLabel').style.display = "none";
+            document.getElementById('updateLabel').style.display = "inline";
+
+            document.getElementById('doCreateButton').style.display = "none";
+            document.getElementById('doUpdateButton').style.display = "block";
+
+            var rowElement = buttonElement.parentNode.parentNode;
+            var recipe = getRecipeFromRow(rowElement);
+            populateFormWithRecipe(recipe);
+        }
+
+        function doCreate() {
+            var recipe = getRecipeFromForm();
+            createRecipeAjax(recipe);
+        }
+
+        function doUpdate() {
+            var recipe = getRecipeFromForm();
+            updateRecipeAjax(recipe);
+        }
+
+        function doDelete(rowElement) {
+            var id = rowElement.getAttribute("id");
+            deleteRecipeAjax(id);
+            rowElement.remove();
+        }
+
+        function addRecipeToTable(recipe) {
+            var tableElement = document.getElementById('recipeTable');
+            var rowElement = tableElement.insertRow(-1);
+            rowElement.setAttribute('id', recipe.id);
+            rowElement.innerHTML = `
+                <td>${recipe.id}</td>
+                <td>${recipe.name}</td>
+                <td>${recipe.ingredients}</td>
+                <td>${recipe.instructions}</td>
+                <td><button onclick="showUpdate(this)">Update</button></td>
+                <td><button onclick="doDelete(this.parentNode.parentNode)">Delete</button></td>
+            `;
+        }
+
+        function clearForm() {
+            var form = document.getElementById('createUpdateForm');
+            form.reset();
+        }
+
+        function getRecipeFromRow(rowElement) {
+            var recipe = {
+                id: rowElement.getAttribute('id'),
+                name: rowElement.cells[1].textContent,
+                ingredients: rowElement.cells[2].textContent,
+                instructions: rowElement.cells[3].textContent
+            };
+            return recipe;
+        }
+
+        function populateFormWithRecipe(recipe) {
+            var form = document.getElementById('createUpdateForm');
+            form.querySelector('input[name="id"]').value = recipe.id;
+            form.querySelector('input[name="name"]').value = recipe.name;
+            form.querySelector('input[name="ingredients"]').value = recipe.ingredients;
+            form.querySelector('input[name="instructions"]').value = recipe.instructions;
+        }
+
+        function getRecipeFromForm() {
+            var form = document.getElementById('createUpdateForm');
+            var recipe = {
+                id: form.querySelector('input[name="id"]').value,
+                name: form.querySelector('input[name="name"]').value,
+                ingredients: form.querySelector('input[name="ingredients"]').value,
+                instructions: form.querySelector('input[name="instructions"]').value
+            };
+            return recipe;
+        }
+
+        function getAllAjax() {
+            $.ajax({
+                url: "/api/recipes",
+                method: "GET",
+                success: function (result) {
+                    result.forEach(recipe => {
+                        addRecipeToTable(recipe);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log("error: " + status + " msg:" + error);
+                }
+            });
+        }
+
+        function createRecipeAjax(recipe) {
+            $.ajax({
+                url: "/api/recipes",
+                method: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(recipe),
+                success: function (result) {
+                    recipe.id = result.id;
+                    addRecipeToTable(recipe);
+                    clearForm();
+                    showViewAll();
+                },
+                error: function (xhr, status, error) {
+                    console.log("error: " + status + " msg:" + error);
+                }
+            });
+        }
+
+        function updateRecipeAjax(recipe) {
+            $.ajax({
+                url: "/api/recipes/" + recipe.id,
+                method: "PUT",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(recipe),
+                success: function (result) {
+                    // Update the table or do any necessary UI updates
+                    showViewAll();
+                },
+                error: function (xhr, status, error) {
+                    console.log("error: " + status + " msg:" + error);
+                }
+            });
+        }
+
+        function deleteRecipeAjax(id) {
+            $.ajax({
+                url: "/api/recipes/" + id,
+                method: "DELETE",
+                success: function (result) {
+                    // Update the table or do any necessary UI updates
+                    showViewAll();
+                },
+                error: function (xhr, status, error) {
+                    console.log("error: " + status + " msg:" + error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            // Load recipes when the document is ready
+            getAllAjax();
+        });
+    </script>
+
+</body>
+
+</html>
