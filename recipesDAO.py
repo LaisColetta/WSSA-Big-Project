@@ -20,10 +20,13 @@ class RecipesDAO:
         sql = "INSERT INTO recipes (name, ingredients, instructions) VALUES (%s, %s, %s)"
         self.cursor.execute(sql, values)
         self.connection.commit()
-        return self.cursor.lastrowid
+        self.cursor.execute("SELECT LAST_INSERT_ID()")
+        last_insert_id = self.cursor.fetchone()[0]
+        return last_insert_id
+
 
     def get_all(self):
-        sql = "SELECT * FROM recipes"
+        sql = "SELECT * FROM recipes ORDER BY id"
         self.cursor.execute(sql)
         results = self.cursor.fetchall()
         returnArray = []
@@ -31,19 +34,27 @@ class RecipesDAO:
             returnArray.append(self.convert_to_dictionary(result))
         return returnArray
 
+
     def find_by_id(self, id):
         sql = "SELECT * FROM recipes WHERE id = %s"
         self.cursor.execute(sql, (id,))
         result = self.cursor.fetchone()
         if result:
-            return self.convert_to_dictionary(result)
+            return self.convert_to_dictionary(result)  # If result found, convert it to a dictionary and return it
         else:
-            return None
+            return None  # If no result found, return None
 
-    def update(self, values):
-        sql = "UPDATE recipes SET name = %s, ingredients = %s, instructions = %s WHERE id = %s"
-        self.cursor.execute(sql, values)
-        self.connection.commit()
+    def update(self, id, name, ingredients, instructions):
+        try:
+            sql = "UPDATE recipes SET name = %s, ingredients = %s, instructions = %s WHERE id = %s"
+            self.cursor.execute(sql, (name, ingredients, instructions, id))
+            self.connection.commit()
+            return True  # Indicate successful update
+        except Exception as e:
+            print(f"Error updating recipe: {e}")
+            self.connection.rollback()
+            return False  # Indicate update failure
+
 
     def delete(self, id):
         sql = "DELETE FROM recipes WHERE id = %s"
@@ -52,9 +63,6 @@ class RecipesDAO:
 
     def convert_to_dictionary(self, result):
         colnames = ['id', 'name', 'ingredients', 'instructions']
-        item = {}
-        for i, colname in enumerate(colnames):
-            item[colname] = result[i]
-        return item
+        return {colname: value for colname, value in zip(colnames, result)}  # Convert result to dictionary and return it
 
 recipesDAO = RecipesDAO()

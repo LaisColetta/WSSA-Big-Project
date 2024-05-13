@@ -36,8 +36,9 @@ def update_recipe(recipe_id):
     data = request.json
     if not data or 'name' not in data or 'ingredients' not in data or 'instructions' not in data:
         abort(400)
-    recipesDAO.update((data['name'], data['ingredients'], data['instructions'], recipe_id))
+    recipesDAO.update(recipe_id, data['name'], data['ingredients'], data['instructions'])
     return jsonify({'message': 'Recipe updated successfully'})
+
 
 @app.route('/api/recipes/<int:recipe_id>', methods=['DELETE'])
 def delete_recipe(recipe_id):
