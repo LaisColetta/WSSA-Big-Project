@@ -88,3 +88,6 @@ class RecipesDAO:
         if hasattr(self, 'cursor'):
             self.cursor.close()
         if hasattr(self, 'connection'):
+            self.connection.close()
+
+recipesDAO = RecipesDAO()
