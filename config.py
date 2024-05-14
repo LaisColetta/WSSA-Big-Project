@@ -1,4 +1,7 @@
 class config:
     DEBUG = True
     SECRET_KEY = 'recipe123'
-    SQLITE_DATABASE_PATH = 'C:\\Users\\appDB\\Desktop\\WSSA-Big-Project\\recipes'
+    MYSQL_DATABASE_HOST = 'laiscoletta.mysql.pythonanywhere-services.com'
+    MYSQL_DATABASE_USER = 'laiscoletta'
+    MYSQL_DATABASE_PASSWORD = 'recipe123'
+    MYSQL_DATABASE_DB = 'recipedb'
