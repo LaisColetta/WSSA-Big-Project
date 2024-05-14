@@ -23,11 +23,10 @@ def create_recipe():
     print("Received data:", data)
     if not data or 'name' not in data or 'ingredients' not in data or 'instructions' not in data:
         print("Invalid data received.")
-        abort(400)
+        return jsonify({'error': 'Invalid data received'}), 400
     new_recipe_id = recipesDAO.create(data['name'], data['ingredients'], data['instructions'])
     print("New recipe created with ID:", new_recipe_id)
-    # Redirect the user to the main page after creating the recipe
-    return redirect(url_for('index'))
+    return jsonify({'message': 'Recipe created successfully', 'recipe_id': new_recipe_id}), 201
 
 @app.route('/api/recipes/<int:recipe_id>', methods=['GET'])
 def get_recipe(recipe_id):
