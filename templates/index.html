@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-     
-
         header {
             text-align: center;
             padding: 20px;
@@ -18,7 +16,7 @@
         }
 
         #showCreateButton {
-			margin-top: 10px;
+            margin-top: 10px;
             background-color: #8B0000;
             color: white;
             padding: 10px 20px;
@@ -33,14 +31,14 @@
         }
 
         table th {
-			background-color: #555;
-			color: white;
+            background-color: #555;
+            color: white;
         }
 
         #createUpdateForm {
-            text-align: center;
+            text-align: left; /* Align text to the left */
             margin-top: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            background-color: rgba(128, 128, 128, 0.3); /* Faded grey color */
             padding: 20px;
             border-radius: 10px;
         }
@@ -62,6 +60,12 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
+        /* Align labels to the left */
+        #createUpdateForm label {
+            text-align: left;
+            display: block;
+        }
     </style>
 </head>
 
@@ -71,10 +75,39 @@
               background-position: center;
               text-align: center;
               padding: 50px;">
-		<h1 style="color: white;
-				   font-size: 3rem;">My Food Canvas</h1>
-	</header>
+        <h1 style="color: white;
+                   font-size: 3rem;">My Food Canvas</h1>
+    </header>
 
+    <div>
+        <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
+    </div>
+
+    <div>
+        <table class="table" id="recipeTable">
+            <!-- Table headers -->
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Ingredients</th>
+                <th>Instructions</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <!-- Table rows will be dynamically added here -->
+        </table>
+    </div>
+
+    <div id='createUpdateForm' style="display: none">
+        <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
+        <input type="hidden" name="id" />
+        <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
+        <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
+        <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
+        <button id="doCreateButton" onclick="doCreate()">Create</button>
+        <button id="doUpdateButton" onclick="doUpdate()">Update</button>
+        <button id="doCancelButton" onclick="clearForm()">Cancel</button>
+    </div>
 
 
     <div>
