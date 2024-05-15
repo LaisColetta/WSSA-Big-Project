@@ -5,28 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Food Canvas</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
+        /* General Styles */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-image: url('https://images.pexels.com/photos/1435909/pexels-photo-1435909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            background-position: center;
+            color: white;
         }
 
-        header {
-            text-align: center;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: #343a40;
-            color: #fff;
         }
 
+        /* Header Styles */
+        header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0;
+        }
+
+        /* Button Styles */
         #showCreateButton {
             margin-top: 20px;
-            background-color: #dc3545;
-            color: #fff;
+            background-color: #8B0000;
+            color: white;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -35,47 +52,51 @@
         }
 
         #showCreateButton:hover {
-            background-color: #c82333;
+            background-color: #6a0000;
         }
 
+        /* Table Styles */
         table {
-            margin: 20px auto;
-            color: #333;
-            background-color: #fff;
+            margin-bottom: 20px;
+            width: 100%;
             border-collapse: collapse;
-            width: 90%;
-            max-width: 800px;
         }
 
-        table th {
-            background-color: #343a40;
-            color: #fff;
+        th, td {
             padding: 10px;
             text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        th {
+            background-color: #555;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Form Styles */
         #createUpdateForm {
-            margin: 20px auto;
-            background-color: #fff;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
+            text-align: center;
+            display: none;
         }
 
         #createUpdateForm input[type="text"] {
-            width: calc(100% - 20px);
+            width: calc(100% - 22px);
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border-radius: 5px;
-            border: 1px solid #ced4da;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
         }
 
         #createUpdateForm button {
             margin-top: 10px;
-            background-color: #dc3545;
-            color: #fff;
+            background-color: #8B0000;
+            color: white;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -84,40 +105,11 @@
         }
 
         #createUpdateForm button:hover {
-            background-color: #c82333;
+            background-color: #6a0000;
         }
 
         #createUpdateForm h2 {
-            font-size: 24px;
             margin-bottom: 20px;
-            color: #343a40;
-        }
-
-        /* Align labels to the left */
-        #createUpdateForm label {
-            display: block;
-            margin-bottom: 5px;
-            color: #343a40;
-            font-weight: bold;
-        }
-
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            table {
-                font-size: 14px;
-            }
-
-            #createUpdateForm {
-                padding: 15px;
-            }
-
-            #createUpdateForm input[type="text"] {
-                margin-bottom: 15px;
-            }
-
-            #createUpdateForm button {
-                padding: 8px 15px;
-            }
         }
     </style>
 </head>
@@ -146,7 +138,7 @@
             </tbody>
         </table>
 
-        <div id='createUpdateForm' style="display: none">
+        <div id='createUpdateForm'>
             <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
             <input type="hidden" name="id" />
             <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
