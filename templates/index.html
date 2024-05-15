@@ -98,15 +98,15 @@
             color: black; /* Changed text color to black */
         }
 
-        #createUpdateForm input[type="text"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: none;
-            background-color: rgba(0, 0, 0, 0.1); /* Very light grey */
-            color: black;
-        }
+        #createUpdateForm {
+			padding: 20px;
+			border-radius: 10px;
+			text-align: center;
+			display: none;
+			color: black; /* Changed text color to black */
+			max-height: 80vh; /* Set maximum height */
+			overflow-y: auto; /* Enable vertical scrolling */
+		}
 
         #createUpdateForm button {
             margin-top: 10px;
