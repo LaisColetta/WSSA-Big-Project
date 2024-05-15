@@ -19,6 +19,10 @@
             background-size: cover;
             background-position: center;
             color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
@@ -26,7 +30,6 @@
             padding: 20px;
             position: relative;
             text-align: center;
-            margin: 0 auto; /* Center the container */
         }
 
         /* White Box Styles */
@@ -94,6 +97,8 @@
             text-align: center;
             display: none;
             color: black; /* Changed text color to black */
+            max-height: calc(100vh - 200px); /* Adjusted maximum height for scrolling */
+            overflow-y: auto; /* Added overflow for vertical scrolling */
         }
 
         #createUpdateForm input[type="text"] {
@@ -184,7 +189,7 @@
 				document.getElementById('createUpdateForm').style.display = "none";
 			}
 
-			function showUpdate(buttonElement) {
+			function showUpdate(id) {
 				document.getElementById('showCreateButton').style.display = "none";
 				document.getElementById('recipeTable').style.display = "none";
 				document.getElementById('createUpdateForm').style.display = "block";
@@ -194,11 +199,7 @@
 
 				document.getElementById('doCreateButton').style.display = "none";
 				document.getElementById('doUpdateButton').style.display = "block";
-
-				var rowElement = buttonElement.parentNode.parentNode;
-				var recipe = getRecipeFromRow(rowElement);
-				populateFormWithRecipe(recipe);
-			}
+			}ß	
 
 			function doCreate() {
 				var form = document.getElementById('createUpdateForm');
