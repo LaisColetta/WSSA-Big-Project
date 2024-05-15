@@ -5,141 +5,181 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Food Canvas</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://images.pexels.com/photos/4282689/pexels-photo-4282689.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1;
+        }
+
         header {
             text-align: center;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            background-color: transparent;
+            color: #fff;
+            position: relative;
+            z-index: 2;
         }
 
         #showCreateButton {
-            margin-top: 10px;
-            background-color: #8B0000;
-            color: white;
+            margin-top: 20px;
+            background-color: #dc3545;
+            color: #fff;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
+            z-index: 2;
+            position: relative;
+        }
+
+        #showCreateButton:hover {
+            background-color: #c82333;
         }
 
         table {
-            margin: 0 auto;
-            color: black;
+            margin: 20px auto;
+            color: #333;
+            background-color: #fff;
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 800px;
+            z-index: 2;
+            position: relative;
         }
 
         table th {
-            background-color: #555;
-            color: white;
+            background-color: #343a40;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
         }
 
         #createUpdateForm {
-            text-align: left; /* Align text to the left */
-            margin-top: 20px;
-            background-color: rgba(128, 128, 128, 0.3); /* Faded grey color */
+            margin: 20px auto;
+            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            z-index: 2;
+            position: relative;
         }
 
         #createUpdateForm input[type="text"] {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             border-radius: 5px;
-            border: none;
+            border: 1px solid #ced4da;
         }
 
         #createUpdateForm button {
             margin-top: 10px;
-            background-color: #8B0000;
-            color: white;
+            background-color: #dc3545;
+            color: #fff;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #createUpdateForm button:hover {
+            background-color: #c82333;
+        }
+
+        #createUpdateForm h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #343a40;
         }
 
         /* Align labels to the left */
         #createUpdateForm label {
-            text-align: left;
             display: block;
+            margin-bottom: 5px;
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+
+            #createUpdateForm {
+                padding: 15px;
+            }
+
+            #createUpdateForm input[type="text"] {
+                margin-bottom: 15px;
+            }
+
+            #createUpdateForm button {
+                padding: 8px 15px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header style="background-image: url('https://images.pexels.com/photos/1435909/pexels-photo-1435909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-              background-size: cover;
-              background-position: center;
-              text-align: center;
-              padding: 50px;">
-        <h1 style="color: white;
-                   font-size: 3rem;">My Food Canvas</h1>
+
+    <header>
+        <h1>My Food Canvas</h1>
     </header>
 
-    <div>
-        <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
-    </div>
+    <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
 
-    <div>
+    <div class="container">
         <table class="table" id="recipeTable">
-            <!-- Table headers -->
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Ingredients</th>
-                <th>Instructions</th>
-                <th></th>
-                <th></th>
-            </tr>
-            <!-- Table rows will be dynamically added here -->
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Ingredients</th>
+                    <th>Instructions</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically added here -->
+            </tbody>
         </table>
+
+        <div id='createUpdateForm' style="display: none">
+            <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
+            <input type="hidden" name="id" />
+            <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
+            <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
+            <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
+            <button id="doCreateButton" onclick="doCreate()">Create</button>
+            <button id="doUpdateButton" onclick="doUpdate()">Update</button>
+            <button id="doCancelButton" onclick="clearForm()">Cancel</button>
+        </div>
     </div>
-
-    <div id='createUpdateForm' style="display: none">
-        <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
-        <input type="hidden" name="id" />
-        <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
-        <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
-        <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
-        <button id="doCreateButton" onclick="doCreate()">Create</button>
-        <button id="doUpdateButton" onclick="doUpdate()">Update</button>
-        <button id="doCancelButton" onclick="clearForm()">Cancel</button>
-    </div>
-
-
-    <div>
-        <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
-    </div>
-
-    <div>
-        <table class="table" id="recipeTable">
-            <!-- Table headers -->
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Ingredients</th>
-                <th>Instructions</th>
-                <th></th>
-                <th></th>
-            </tr>
-            <!-- Table rows will be dynamically added here -->
-        </table>
-    </div>
-
-    <div id='createUpdateForm' style="display: none">
-		<h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
-		<input type="hidden" name="id" />
-		<p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
-		<p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
-		<p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
-		<button id="doCreateButton" onclick="doCreate()">Create</button>
-		<button id="doUpdateButton" onclick="doUpdate()">Update</button>
-		<button id="doCancelButton" onclick="clearForm()">Cancel</button>
-	</div>
-
 
     <script>
 		function showCreate() {
