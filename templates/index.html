@@ -10,33 +10,17 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('https://images.pexels.com/photos/4282689/pexels-photo-4282689.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-            background-size: cover;
-            background-position: center;
+            background-color: #f8f9fa;
             color: #333;
             margin: 0;
             padding: 0;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0.7) 100%);
-            z-index: 1;
         }
 
         header {
             text-align: center;
             padding: 20px;
-            background-color: transparent;
+            background-color: #343a40;
             color: #fff;
-            position: relative;
-            z-index: 2;
         }
 
         #showCreateButton {
@@ -48,8 +32,6 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            z-index: 2;
-            position: relative;
         }
 
         #showCreateButton:hover {
@@ -63,8 +45,6 @@
             border-collapse: collapse;
             width: 90%;
             max-width: 800px;
-            z-index: 2;
-            position: relative;
         }
 
         table th {
@@ -82,8 +62,6 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 600px;
-            z-index: 2;
-            position: relative;
         }
 
         #createUpdateForm input[type="text"] {
@@ -145,14 +123,13 @@
 </head>
 
 <body>
-
     <header>
         <h1>My Food Canvas</h1>
     </header>
 
-    <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
-
     <div class="container">
+        <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
+
         <table class="table" id="recipeTable">
             <thead>
                 <tr>
