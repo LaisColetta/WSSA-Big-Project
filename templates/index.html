@@ -5,108 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Food Canvas</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* General Styles */
+        /* Global Styles */
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://images.pexels.com/photos/4021695/pexels-photo-4021695.jpeg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            max-width: 800px;
-            padding: 20px;
-            position: relative;
-            text-align: center;
-        }
-
-        /* White Box Styles */
-        .white-box {
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-            padding: 20px;
-            border-radius: 10px;
         }
 
         /* Header Styles */
         header {
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            color: #333;
         }
 
         /* Button Styles */
         #showCreateButton {
-            margin-top: 20px;
             background-color: #8B0000;
-            color: white; /* Changed text color to white */
+            color: white;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        #showCreateButton:hover {
-            background-color: #6a0000;
         }
 
         /* Table Styles */
         table {
-            margin: 0 auto 20px auto;
-            width: 100%;
-            border-collapse: collapse;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            margin: 20px auto;
             color: black;
         }
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        th {
+        table th {
             background-color: #555;
             color: white;
-            font-weight: bold;
         }
 
         /* Form Styles */
         #createUpdateForm {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             display: none;
             color: black; /* Changed text color to black */
+            max-height: 80vh; /* Set maximum height */
+            overflow-y: auto; /* Enable vertical scrolling */
         }
 
-        #createUpdateForm {
-			padding: 20px;
-			border-radius: 10px;
-			text-align: center;
-			display: none;
-			color: black; /* Changed text color to black */
-			max-height: 80vh; /* Set maximum height */
-			overflow-y: auto; /* Enable vertical scrolling */
-		}
+        #createUpdateForm input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
         #createUpdateForm button {
             margin-top: 10px;
@@ -116,55 +71,59 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
         }
 
-        #createUpdateForm button:hover {
-            background-color: #6a0000;
-        }
-
-        #createUpdateForm h2 {
-            margin-bottom: 20px;
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header>
+    <header style="background-image: url('https://images.pexels.com/photos/4021695/pexels-photo-4021695.jpeg');
+              background-size: cover;
+              background-position: center;
+              text-align: center;
+              padding: 50px;">
         <h1>My Food Canvas</h1>
     </header>
 
-    <div class="container">
-        <div class="white-box">
-            <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
-            <table class="table" id="recipeTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Ingredients</th>
-                        <th>Instructions</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Table rows will be dynamically added here -->
-                </tbody>
-            </table>
-
-            <div id='createUpdateForm'>
-                <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
-                <input type="hidden" name="id" />
-                <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
-                <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
-                <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
-                <button id="doCreateButton" onclick="doCreate()">Create</button>
-                <button id="doUpdateButton" onclick="doUpdate()">Update</button>
-                <button id="doCancelButton" onclick="clearForm()">Cancel</button>
-            </div>
-        </div>
+    <div class="container mt-4">
+        <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
     </div>
+
+    <div class="container mt-4">
+        <table class="table" id="recipeTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Ingredients</th>
+                    <th>Instructions</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div id='createUpdateForm' style="display: none;">
+        <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
+        <input type="hidden" name="id" />
+        <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
+        <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
+        <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
+        <button id="doCreateButton" onclick="doCreate()">Create</button>
+        <button id="doUpdateButton" onclick="doUpdate()">Update</button>
+        <button id="doCancelButton" onclick="clearForm()">Cancel</button>
+    </div>
+
     <script>
 		function showCreate() {
 				document.getElementById('showCreateButton').style.display = "none";
