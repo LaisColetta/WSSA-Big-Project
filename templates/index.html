@@ -8,32 +8,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* General Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://images.pexels.com/photos/4542999/pexels-photo-4542999.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-image: url('https://images.pexels.com/photos/4021695/pexels-photo-4021695.jpeg');
             background-size: cover;
             background-position: center;
             color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .container {
             max-width: 800px;
-            margin: 0 auto;
             padding: 20px;
             position: relative;
+            text-align: center;
         }
 
-        /* Black Box Styles */
-        .black-box {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+        /* White Box Styles */
+        .white-box {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
             padding: 20px;
             border-radius: 10px;
         }
@@ -48,14 +49,14 @@
 
         h1 {
             font-size: 3rem;
-            margin-bottom: 0;
+            margin-bottom: 20px;
         }
 
         /* Button Styles */
         #showCreateButton {
             margin-top: 20px;
             background-color: #8B0000;
-            color: white;
+            color: white; /* Changed text color to white */
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -69,15 +70,17 @@
 
         /* Table Styles */
         table {
-            margin-bottom: 20px;
+            margin: 0 auto 20px auto;
             width: 100%;
             border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            color: black;
         }
 
         th, td {
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         th {
@@ -88,11 +91,11 @@
 
         /* Form Styles */
         #createUpdateForm {
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             display: none;
+            color: black; /* Changed text color to black */
         }
 
         #createUpdateForm input[type="text"] {
@@ -101,8 +104,8 @@
             margin-bottom: 10px;
             border-radius: 5px;
             border: none;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
+            background-color: rgba(0, 0, 0, 0.1); /* Very light grey */
+            color: black;
         }
 
         #createUpdateForm button {
@@ -132,7 +135,7 @@
     </header>
 
     <div class="container">
-        <div class="black-box">
+        <div class="white-box">
             <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
             <table class="table" id="recipeTable">
                 <thead>
