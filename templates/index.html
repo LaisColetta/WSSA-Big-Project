@@ -189,7 +189,7 @@
 				document.getElementById('createUpdateForm').style.display = "none";
 			}
 
-			function showUpdate(id) {
+			function showUpdate(buttonElement) {
 				document.getElementById('showCreateButton').style.display = "none";
 				document.getElementById('recipeTable').style.display = "none";
 				document.getElementById('createUpdateForm').style.display = "block";
@@ -199,7 +199,11 @@
 
 				document.getElementById('doCreateButton').style.display = "none";
 				document.getElementById('doUpdateButton').style.display = "block";
-			}ß	
+
+				var rowElement = buttonElement.parentNode.parentNode;
+				var recipe = getRecipeFromRow(rowElement);
+				populateFormWithRecipe(recipe);
+			}
 
 			function doCreate() {
 				var form = document.getElementById('createUpdateForm');
