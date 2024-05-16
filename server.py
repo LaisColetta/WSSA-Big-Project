@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort, redirect, url_for
+from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, requests
 from recipesDAO import recipesDAO
 
 app = Flask(__name__)
@@ -55,6 +55,23 @@ def delete_recipe(recipe_id):
     recipesDAO.delete(recipe_id)
     print("Recipe deleted successfully.")
     return jsonify({'message': 'Recipe deleted successfully'})
+
+@app.route('/api/recipes/search', methods=['POST'])
+def search_online_recipes():
+    print("Accessing POST /api/recipes/search...")
+    data = request.json
+    query = data.get('query')
+    if not query:
+        return jsonify({'error': 'Missing search query'}), 400
+    edamam_app_id = 'caa57a65'
+    edamam_app_key = '67442644f15763961b1408291b163751'
+    edamam_api_url = f'https://api.edamam.com/search?q={query}&app_id={edamam_app_id}&app_key={edamam_app_key}'
+    response = requests.get(edamam_api_url)
+    if response.status_code == 200:
+        recipes = response.json().get('hits', [])
+        return jsonify(recipes)
+    else:
+        return jsonify({'error': 'Failed to fetch recipes from EDAMAM'}), 500
 
 if __name__ == '__main__':
     app.run(threaded=False)

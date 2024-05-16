@@ -169,8 +169,15 @@
                 <button id="doUpdateButton" onclick="doUpdate()">Update</button>
                 <button id="doCancelButton" onclick="clearForm()">Cancel</button>
             </div>
+			<div id='searchForm'>
+				<h2>Search Online Recipes</h2>
+				<input type="text" id="searchQuery" placeholder="Enter recipe name">
+				<button onclick="searchOnlineRecipes()">Search</button>
+				<div id="searchResults"></div>
+			</div>
         </div>
     </div>
+	
 </body>
 
     <script>
@@ -268,6 +275,69 @@
 				};
 				return recipe;
 			}
+
+			function searchOnlineRecipes() {
+				var query = document.getElementById('searchQuery').value;
+				if (!query.trim()) {
+					alert("Please enter a search query.");
+					return;
+				}
+
+				// Perform AJAX request to fetch recipes from Edamam database
+				$.ajax({
+					url: "/api/recipes/search",
+					method: "POST",
+					contentType: "application/json",
+					data: JSON.stringify({ query: query }),
+					dataType: "json",
+					success: function (data) {
+						displaySearchResults(data);
+					},
+					error: function (xhr, status, error) {
+						console.error("Error: " + status + ", Message: " + error);
+					}
+				});
+			}
+
+			function displaySearchResults(recipes) {
+				var searchResultsDiv = document.getElementById('searchResults');
+				searchResultsDiv.innerHTML = '';
+
+				recipes.forEach(function (recipe) {
+					var recipeDiv = document.createElement('div');
+					recipeDiv.innerHTML = `
+						<p>Name: ${recipe.name}</p>
+						<p>Ingredients: ${recipe.ingredients}</p>
+						<p>Instructions: ${recipe.instructions}</p>
+						<button onclick="addRecipeToMyRecipes('${recipe.name}', '${recipe.ingredients}', '${recipe.instructions}')">Add to My Recipes</button>
+					`;
+					searchResultsDiv.appendChild(recipeDiv);
+				});
+			}
+
+			function addRecipeToMyRecipes(name, ingredients, instructions) {
+				// Perform AJAX request to add recipe to SQL database
+				var recipe = {
+					name: name,
+					ingredients: ingredients,
+					instructions: instructions
+				};
+
+				$.ajax({
+					url: "/api/recipes",
+					method: "POST",
+					contentType: "application/json",
+					data: JSON.stringify(recipe),
+					dataType: "json",
+					success: function () {
+						alert("Recipe added successfully");
+						// You can optionally update the UI or redirect to another page
+					},
+					error: function (xhr, status, error) {
+						console.error("Error: " + status + ", Message: " + error);
+					}
+				});
+			}		
 
 			function populateFormWithRecipe(recipe) {
 				var form = document.getElementById('createUpdateForm');

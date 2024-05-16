@@ -1,4 +1,5 @@
 import mysql.connector
+import requests
 from config import config as cfg
 
 class RecipesDAO:
@@ -83,6 +84,39 @@ class RecipesDAO:
     def convert_to_dictionary(self, result):
         colnames = ['id', 'name', 'ingredients', 'instructions']
         return {colname: value for colname, value in zip(colnames, result)}
+
+    def search_recipes_online(self, query):
+        app_id = cfg.EDAMAM_APP_ID
+        app_key = cfg.EDAMAM_APP_KEY
+        url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
+        
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error: {response.status_code}")
+            return None
+
+    def add_online_recipe(self, query):
+        api_response = self.search_recipes_online(query)
+        if api_response:
+            recipes = self.extract_recipe_details(api_response)
+            for recipe in recipes:
+                self.create(recipe['name'], recipe['ingredients'], recipe['instructions'])
+                print(f"Recipe {recipe['name']} added successfully!")
+        else:
+            print("No recipes found.")
+
+    def extract_recipe_details(self, api_response):
+        recipes = []
+        for hit in api_response['hits']:
+            recipe = hit['recipe']
+            recipes.append({
+                'name': recipe['label'],
+                'ingredients': ', '.join(recipe['ingredientLines']),
+                'instructions': recipe.get('url', 'Instructions not available')
+            })
+        return recipes
 
     def __del__(self):
         if hasattr(self, 'cursor'):
