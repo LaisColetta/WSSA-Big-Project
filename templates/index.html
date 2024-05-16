@@ -181,22 +181,30 @@
 </body>
 
     <script>
-		function showCreate() {
-				document.getElementById('showCreateButton').style.display = "none";
-				document.getElementById('recipeTable').style.display = "none";
-				document.getElementById('createUpdateForm').style.display = "block";
+			function showCreate() {
+				try {
+					document.getElementById('showCreateButton').style.display = "none";
+					document.getElementById('recipeTable').style.display = "none";
+					document.getElementById('createUpdateForm').style.display = "block";
 
-				document.getElementById('createLabel').style.display = "inline";
-				document.getElementById('updateLabel').style.display = "none";
+					document.getElementById('createLabel').style.display = "inline";
+					document.getElementById('updateLabel').style.display = "none";
 
-				document.getElementById('doCreateButton').style.display = "block";
-				document.getElementById('doUpdateButton').style.display = "none";
+					document.getElementById('doCreateButton').style.display = "block";
+					document.getElementById('doUpdateButton').style.display = "none";
+				} catch (error) {
+					console.error("Error in showCreate function:", error);
+				}
 			}
 
 			function showViewAll() {
-				document.getElementById('showCreateButton').style.display = "block";
-				document.getElementById('recipeTable').style.display = "block";
-				document.getElementById('createUpdateForm').style.display = "none";
+				try {
+					document.getElementById('showCreateButton').style.display = "block";
+					document.getElementById('recipeTable').style.display = "block";
+					document.getElementById('createUpdateForm').style.display = "none";
+				} catch (error) {
+					console.error("Error in showViewAll function:", error);
+				}
 			}
 
 			function showUpdate(buttonElement) {
@@ -348,20 +356,27 @@
 			}
 
 			function getAllRecipesAjax() {
-				$.ajax({
-					url: "/api/recipes",
-					method: "GET",
-					dataType: "json",
-					success: function (recipes) {
-						recipes.forEach(function (recipe) {
-							addRecipeToTable(recipe);
-						});
-					},
-					error: function (xhr, status, error) {
-						console.error("Error: " + status + ", Message: " + error);
-					}
-				});
+				try {
+					$.ajax({
+						url: "/api/recipes",
+						method: "GET",
+						dataType: "json",
+						success: function (recipes) {
+							recipes.forEach(function (recipe) {
+								addRecipeToTable(recipe);
+							});
+						},
+						error: function (xhr, status, error) {
+							console.error("Error in getAllRecipesAjax function - Status:", status + ", Message:", error);
+						}
+					});
+				} catch (error) {
+					console.error("Error in getAllRecipesAjax function:", error);
+				}
 			}
+
+    // Call getAllRecipesAjax function on page load
+    getAllRecipesAjax();
 
 			function createRecipeAjax(recipe) {
 				$.ajax({
