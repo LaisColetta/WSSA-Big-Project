@@ -21,11 +21,6 @@ class RecipesDAO:
                         instructions TEXT
                     )"""
             self.cursor.execute(sql)
-
-            # Reset auto-incrementing ID to start from 1
-            reset_auto_increment_sql = "ALTER TABLE recipes AUTO_INCREMENT = 1;"
-            self.cursor.execute(reset_auto_increment_sql)
-
             self.connection.commit()
         except mysql.connector.Error as e:
             print(f"Error creating table: {e}")

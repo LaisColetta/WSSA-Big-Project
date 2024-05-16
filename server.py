@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify, abort, redirect, url
 from recipesDAO import recipesDAO
 
 app = Flask(__name__)
-recipesDAO = recipesDAO()
 
 # Routes for web interface
 @app.route('/')
