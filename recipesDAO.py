@@ -10,7 +10,6 @@ class RecipesDAO:
             database=cfg.MYSQL_DATABASE_DB
         )
         self.cursor = self.connection.cursor()
-        self.reset_auto_increment()
         self.create_db_table()
 
     def create_db_table(self):
