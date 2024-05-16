@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, requests
+from flask import Flask, render_template, jsonify, abort, redirect, url_for, request
 from recipesDAO import recipesDAO
 from config import config as cfg
+import requests
 
 app = Flask(__name__)
 
