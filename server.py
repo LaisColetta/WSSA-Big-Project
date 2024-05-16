@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, requests
 from recipesDAO import recipesDAO
+from config import config as cfg
 
 app = Flask(__name__)
 
@@ -63,9 +64,10 @@ def search_online_recipes():
     query = data.get('query')
     if not query:
         return jsonify({'error': 'Missing search query'}), 400
-    edamam_app_id = 'caa57a65'
-    edamam_app_key = '67442644f15763961b1408291b163751'
-    edamam_api_url = f'https://api.edamam.com/search?q={query}&app_id={edamam_app_id}&app_key={edamam_app_key}'
+    
+    app_id = cfg.EDAMAM_APP_ID
+    app_key = cfg.EDAMAM_APP_KEY
+    edamam_api_url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
     response = requests.get(edamam_api_url)
     if response.status_code == 200:
         recipes = response.json().get('hits', [])
