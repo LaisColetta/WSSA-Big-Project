@@ -108,13 +108,24 @@ class RecipesDAO:
 
     def extract_recipe_details(self, api_response):
         recipes = []
-        for result in api_response.get('results', []):
+        for recipe_data in api_response.get('results', []):
+            # Extract recipe name
+            name = recipe_data.get('title', 'Name not available')
+            
+            # Extract ingredients
+            ingredients = ', '.join([ingredient.get('name', 'Unknown Ingredient') for ingredient in recipe_data.get('extendedIngredients', [])])
+            
+            # Extract instructions
+            instructions = recipe_data.get('sourceUrl', 'Instructions not available')
+            
+            # Append the extracted recipe data to the recipes list
             recipes.append({
-                'name': result['title'],
-                'ingredients': ', '.join([ingredient['name'] for ingredient in result.get('extendedIngredients', [])]),
-                'instructions': result.get('sourceUrl', 'Instructions not available')
+                'name': name,
+                'ingredients': ingredients,
+                'instructions': instructions
             })
         return recipes
+
 
     def __del__(self):
         if hasattr(self, 'cursor'):

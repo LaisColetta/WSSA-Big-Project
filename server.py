@@ -87,8 +87,11 @@ def add_online_recipes():
     if not query:
         return jsonify({'error': 'Missing search query'}), 400
     
-    recipesDAO.add_online_recipe(query)
-    return jsonify({'message': 'Recipes added successfully from Spoonacular'}), 201
+    try:
+        recipesDAO.add_online_recipe(query)
+        return jsonify({'message': 'Recipes added successfully from Spoonacular'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(threaded=False)
