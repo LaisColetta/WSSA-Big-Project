@@ -392,8 +392,8 @@
         }
 
 		function createRecipeAjax(recipe) {
-			$.ajax({
-				url: `${API_URL}`,
+    		$.ajax({
+				url: "/api/recipes", 
 				method: "POST",
 				contentType: "application/json",
 				data: JSON.stringify(recipe),
