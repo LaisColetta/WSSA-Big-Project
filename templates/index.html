@@ -159,12 +159,14 @@
     <div class="container">
         <div class="white-box">
             <button id="showCreateButton" onclick="showCreate()">Add Recipe Manually</button>
-			
+
             <form id="searchForm">
                 <label for="searchQuery">Search for recipes online:</label>
                 <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter keyword...">
                 <button type="button" id="searchButton" onclick="searchOnlineRecipes()">Search</button>
             </form>
+
+            <div id="searchResults"></div>
 
             <table class="table" id="recipeTable">
                 <thead>
@@ -178,14 +180,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Table rows will be dynamically added here -->
+                   <!-- Table rows will be dynamically added here -->
                 </tbody>
             </table>
-
         </div>
     </div>
 
-    <div id="createUpdateForm">
+    <div id="createUpdateForm" style="display:none;">
         <h2 id="createLabel">Add New Recipe</h2>
         <h2 id="updateLabel" style="display: none;">Update Recipe</h2>
         <input type="hidden" name="id">
@@ -194,7 +195,7 @@
         <input type="text" name="instructions" placeholder="Instructions">
         <button id="doCreateButton" onclick="doCreate()">Create Recipe</button>
         <button id="doUpdateButton" onclick="doUpdate()" style="display: none;">Update Recipe</button>
-		<button id="doCancelButton" onclick="clearForm()">Cancel</button>
+        <button id="doCancelButton" onclick="clearForm()">Cancel</button>
     </div>
 
     <script>
@@ -388,39 +389,39 @@
             });
         }
 
-        function createRecipeAjax(recipe) {
-            $.ajax({
-                url: "/api/recipes",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(recipe),
-                dataType: "json",
-                success: function () {
-                    alert("Recipe added successfully");
-                    window.location.href = "/";
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error: " + status + ", Message: " + error);
-                }
-            });
-        }
+		function createRecipeAjax(recipe) {
+			$.ajax({
+				url: "/api/recipes",
+				method: "POST",
+				contentType: "application/json",
+				data: JSON.stringify(recipe),
+				dataType: "json",
+				success: function () {
+					alert("Recipe added successfully");
+					window.location.href = "/";  // Redirect to main page
+				},
+				error: function (xhr, status, error) {
+					console.error("Error: " + status + ", Message: " + error);
+				}
+			});
+		}
 
-        function updateRecipeAjax(recipe) {
-            $.ajax({
-                url: "/api/recipes/" + recipe.id,
-                method: "PUT",
-                contentType: "application/json",
-                data: JSON.stringify(recipe),
-                success: function () {
-                    alert("Recipe updated successfully");
-                    window.location.href = "/";
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error: " + status + ", Message: " + error);
-                }
-            });
-        }
-
+		function updateRecipeAjax(recipe) {
+				$.ajax({
+					url: "/api/recipes/" + recipe.id,
+					method: "PUT",
+					contentType: "application/json",
+					data: JSON.stringify(recipe),
+					success: function () {
+						alert("Recipe updated successfully");
+						window.location.href = "/";  // Redirect to main page
+					},
+					error: function (xhr, status, error) {
+						console.error("Error: " + status + ", Message: " + error);
+					}
+				});
+			}
+			
         function deleteRecipeAjax(id) {
             $.ajax({
                 url: "/api/recipes/" + id,
