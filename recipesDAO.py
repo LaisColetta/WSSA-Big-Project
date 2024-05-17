@@ -86,10 +86,9 @@ class RecipesDAO:
         return {colname: value for colname, value in zip(colnames, result)}
 
     def search_recipes_online(self, query):
-        app_id = cfg.EDAMAM_APP_ID
-        app_key = cfg.EDAMAM_APP_KEY
-        url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
-        
+        app_key = cfg.SPOONACULAR_API_KEY
+        url = f'https://api.spoonacular.com/recipes/complexSearch?query={query}&apiKey={app_key}'
+
         response = requests.get(url)
         if response.status_code == 200:
             return response.json()
@@ -109,12 +108,11 @@ class RecipesDAO:
 
     def extract_recipe_details(self, api_response):
         recipes = []
-        for hit in api_response['hits']:
-            recipe = hit['recipe']
+        for result in api_response.get('results', []):
             recipes.append({
-                'name': recipe['label'],
-                'ingredients': ', '.join(recipe['ingredientLines']),
-                'instructions': recipe.get('url', 'Instructions not available')
+                'name': result['title'],
+                'ingredients': ', '.join([ingredient['name'] for ingredient in result.get('extendedIngredients', [])]),
+                'instructions': result.get('sourceUrl', 'Instructions not available')
             })
         return recipes
 
