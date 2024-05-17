@@ -27,24 +27,25 @@
         }
 
         .container {
-			width: 95%; /* Adjust the width as needed */
-			max-width: 1600px; /* Limit the maximum width */
-			padding: 20px;
-			position: relative;
-			text-align: center;
-		}
+            width: 95%;
+            max-width: 1600px;
+            padding: 20px;
+            position: relative;
+            text-align: center;
+        }
 
-		.white-box {
-			background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-			padding: 20px;
-			border-radius: 10px;
-			max-width: 1400px; /* Adjust the maximum width of the white box */
-			margin: 0 auto; /* Center the box horizontally */
-		}
+        .white-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
         /* Header Styles */
         header {
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            background-color: rgba(0, 0, 0, 0.5);
             text-align: center;
             margin-bottom: 20px;
         }
@@ -58,7 +59,7 @@
         #showCreateButton {
             margin-top: 20px;
             background-color: #8B0000;
-            color: white; /* Changed text color to white */
+            color: white;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -75,11 +76,12 @@
             margin: 0 auto 20px auto;
             width: 100%;
             border-collapse: collapse;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            background-color: rgba(255, 255, 255, 0.8);
             color: black;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             text-align: left;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -93,14 +95,14 @@
 
         /* Form Styles */
         #createUpdateForm {
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             display: none;
-            color: black; /* Changed text color to black */
-            max-height: calc(100vh - 200px); /* Adjusted maximum height for scrolling */
-            overflow-y: auto; /* Added overflow for vertical scrolling */
+            color: black;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
         }
 
         #createUpdateForm input[type="text"] {
@@ -109,7 +111,7 @@
             margin-bottom: 10px;
             border-radius: 5px;
             border: none;
-            background-color: rgba(0, 0, 0, 0.1); /* Very light grey */
+            background-color: rgba(0, 0, 0, 0.1);
             color: black;
         }
 
@@ -131,7 +133,75 @@
         #createUpdateForm h2 {
             margin-bottom: 20px;
         }
+
+        #searchButton {
+            background-color: #8B0000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        #searchButton:hover {
+            background-color: #6a0000;
+        }
     </style>
+</head>
+
+<body>
+    <header>
+        <h1>My Food Canvas</h1>
+        <button id="searchButton" onclick="searchOnlineRecipes()">Search for recipes online</button>
+    </header>
+
+    <div class="container">
+        <div class="white-box">
+            <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
+
+            <table class="table" id="recipeTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Ingredients</th>
+                        <th>Instructions</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+<body>
+    <header>
+        <h1>My Food Canvas</h1>
+        <button id="searchButton" onclick="searchOnlineRecipes()">Search for recipes online</button>
+    </header>
+
+    <div class="container">
+        <div class="white-box">
+            <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
+
+            <table class="table" id="recipeTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Ingredients</th>
+                        <th>Instructions</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically added here -->
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 
     <div id="createUpdateForm">
         <h2 id="createLabel">Add New Recipe</h2>
@@ -144,7 +214,236 @@
         <button id="doUpdateButton" onclick="doUpdate()" style="display: none;">Update Recipe</button>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+		function showCreate() {
+			document.getElementById('showCreateButton').style.display = "none";
+			document.getElementById('recipeTable').style.display = "none";
+			document.getElementById('createUpdateForm').style.display = "block";
+
+			document.getElementById('createLabel').style.display = "inline";
+			document.getElementById('updateLabel').style.display = "none";
+
+			document.getElementById('doCreateButton').style.display = "block";
+			document.getElementById('doUpdateButton').style.display = "none";
+		}
+
+		function showViewAll() {
+			document.getElementById('showCreateButton').style.display = "block";
+			document.getElementById('recipeTable').style.display = "block";
+			document.getElementById('createUpdateForm').style.display = "none";
+		}
+
+		function showUpdate(buttonElement) {
+			document.getElementById('showCreateButton').style.display = "none";
+			document.getElementById('recipeTable').style.display = "none";
+			document.getElementById('createUpdateForm').style.display = "block";
+
+			document.getElementById('createLabel').style.display = "none";
+			document.getElementById('updateLabel').style.display = "inline";
+
+			document.getElementById('doCreateButton').style.display = "none";
+			document.getElementById('doUpdateButton').style.display = "block";
+
+			var rowElement = buttonElement.parentNode.parentNode;
+			var recipe = getRecipeFromRow(rowElement);
+			populateFormWithRecipe(recipe);
+		}
+
+		function doCreate() {
+			var form = document.getElementById('createUpdateForm');
+			var recipe = {
+				name: form.querySelector('input[name="name"]').value,
+				ingredients: form.querySelector('input[name="ingredients"]').value,
+				instructions: form.querySelector('input[name="instructions"]').value
+			};
+			createRecipeAjax(recipe);
+		}
+
+		function doUpdate() {
+			var form = document.getElementById('createUpdateForm');
+			var recipe = {
+				id: form.querySelector('input[name="id"]').value,
+				name: form.querySelector('input[name="name"]').value,
+				ingredients: form.querySelector('input[name="ingredients"]').value,
+				instructions: form.querySelector('input[name="instructions"]').value
+			};
+			updateRecipeAjax(recipe);
+		}
+
+		function doDelete(rowElement) {
+			var tableElement = document.getElementById('recipeTable');
+			var index = rowElement.rowIndex;
+			var id = rowElement.cells[0].innerText; // Assuming ID is in the first column
+			deleteRecipeAjax(id);
+			tableElement.deleteRow(index);
+		}
+
+		function addRecipeToTable(recipe) {
+			var tableElement = document.getElementById('recipeTable');
+			var rowElement = tableElement.insertRow(-1);
+			rowElement.insertCell(0).innerText = recipe.id;
+			rowElement.insertCell(1).innerText = recipe.name;
+			rowElement.insertCell(2).innerText = recipe.ingredients;
+			rowElement.insertCell(3).innerText = recipe.instructions;
+			var updateCell = rowElement.insertCell(4);
+			var deleteCell = rowElement.insertCell(5);
+			updateCell.innerHTML = '<button onclick="showUpdate(this)">Update</button>';
+			deleteCell.innerHTML = '<button onclick="doDelete(this.parentNode.parentNode)">Delete</button>';
+		}
+
+		function clearForm() {
+			var form = document.getElementById('createUpdateForm');
+			form.querySelector('input[name="id"]').value = '';
+			form.querySelector('input[name="name"]').value = '';
+			form.querySelector('input[name="ingredients"]').value = '';
+			form.querySelector('input[name="instructions"]').value = '';
+			showViewAll();
+		}
+
+		function getRecipeFromRow(rowElement) {
+			var recipe = {
+				id: rowElement.cells[0].innerText,
+				name: rowElement.cells[1].innerText,
+				ingredients: rowElement.cells[2].innerText,
+				instructions: rowElement.cells[3].innerText
+			};
+			return recipe;
+		}
+
+		function searchOnlineRecipes() {
+			var query = document.getElementById('searchQuery').value;
+			if (!query.trim()) {
+				alert("Please enter a search query.");
+				return;
+			}
+
+			$.ajax({
+				url: "/api/recipes/search",
+				method: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({ query: query }),
+				dataType: "json",
+				success: function (data) {
+					displaySearchResults(data);
+				},
+				error: function (xhr, status, error) {
+					console.error("Error: " + status + ", Message: " + error);
+				}
+			});
+		}
+
+		function displaySearchResults(recipes) {
+			var searchResultsDiv = document.getElementById('searchResults');
+			searchResultsDiv.innerHTML = '';
+
+			recipes.forEach(function (recipe) {
+				var recipeDiv = document.createElement('div');
+				recipeDiv.innerHTML = `
+					<p>Name: ${recipe.name}</p>
+					<p>Ingredients: ${recipe.ingredients}</p>
+					<p>Instructions: ${recipe.instructions}</p>
+					<button onclick="addRecipeToMyRecipes('${recipe.name}', '${recipe.ingredients}', '${recipe.instructions}')">Add to My Recipes</button>
+				`;
+				searchResultsDiv.appendChild(recipeDiv);
+			});
+		}
+
+		function addRecipeToMyRecipes(name, ingredients, instructions) {
+			var recipe = {
+				name: name,
+				ingredients: ingredients,
+				instructions: instructions
+			};
+
+			$.ajax({
+				url: "/api/recipes",
+				method: "POST",
+				contentType: "application/json",
+				data: JSON.stringify(recipe),
+				dataType: "json",
+				success: function () {
+					alert("Recipe added successfully");
+				},
+				error: function (xhr, status, error) {
+					console.error("Error: " + status + ", Message: " + error);
+				}
+			});
+		}
+
+		function populateFormWithRecipe(recipe) {
+			var form = document.getElementById('createUpdateForm');
+			form.querySelector('input[name="id"]').value = recipe.id;
+			form.querySelector('input[name="name"]').value = recipe.name;
+			form.querySelector('input[name="ingredients"]').value = recipe.ingredients;
+			form.querySelector('input[name="instructions"]').value = recipe.instructions;
+		}
+
+		function getAllRecipesAjax() {
+			$.ajax({
+				url: "/api/recipes",
+				method: "GET",
+				dataType: "json",
+				success: function (recipes) {
+					recipes.forEach(function (recipe) {
+						addRecipeToTable(recipe);
+					});
+				},
+				error: function (xhr, status, error) {
+					console.error("Error in getAllRecipes function - Status:", status + ", Message:", error);
+				}
+			});
+		}
+
+		function createRecipeAjax(recipe) {
+			$.ajax({
+				url: "/api/recipes",
+				method: "POST",
+				contentType: "application/json",
+				data: JSON.stringify(recipe),
+				dataType: "json",
+				success: function () {
+					alert("Recipe added successfully");
+					window.location.href = "/";
+				},
+				error: function (xhr, status, error) {
+					console.error("Error: " + status + ", Message: " + error);
+				}
+			});
+		}
+
+		function updateRecipeAjax(recipe) {
+			$.ajax({
+				url: "/api/recipes/" + recipe.id,
+				method: "PUT",
+				contentType: "application/json",
+				data: JSON.stringify(recipe),
+				success: function () {
+					alert("Recipe updated successfully");
+					window.location.href = "/";
+				},
+				error: function (xhr, status, error) {
+					console.error("Error: " + status + ", Message: " + error);
+				}
+			});
+		}
+
+		function deleteRecipeAjax(id) {
+			$.ajax({
+				url: "/api/recipes/" + id,
+				method: "DELETE",
+				success: function () {
+					var rowElement = document.querySelector('#recipeTable tr[id="' + id + '"]');
+					rowElement.parentNode.removeChild(rowElement);
+				},
+				error: function (xhr, status, error) {
+					console.error("Error: " + status + ", Message: " + error);
+				}
+			});
+		}
+
+		getAllRecipesAjax();   
+	</script>
+	
 </body>
 
 </html>
