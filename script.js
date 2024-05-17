@@ -65,23 +65,23 @@ function doDelete(rowElement) {
 
 function addRecipeToTable(recipe) {
     var tableElement = $('#recipeTable');
-    var rowElement = $('<tr>');
-    rowElement.append($('<td>').text(recipe.id));
-    rowElement.append($('<td>').text(recipe.name));
-    rowElement.append($('<td>').text(recipe.ingredients));
-    rowElement.append($('<td>').text(recipe.instructions));
-    var updateCell = $('<td>').html('<button onclick="showUpdate(this)">Update</button>');
-    var deleteCell = $('<td>').html('<button onclick="doDelete(this.parentNode.parentNode)">Delete</button>');
-    rowElement.append(updateCell);
-    rowElement.append(deleteCell);
-    tableElement.append(rowElement);
+    var rowElement = tableElement.insertRow(-1);
+    rowElement.insertCell(0).innerText = recipe.id;
+    rowElement.insertCell(1).innerText = recipe.name;
+    rowElement.insertCell(2).innerText = recipe.ingredients;
+    rowElement.insertCell(3).innerText = recipe.instructions;
+    var updateCell = rowElement.insertCell(4);
+    var deleteCell = rowElement.insertCell(5);
+    updateCell.html('<button onclick="showUpdate(this)">Update</button>');
+    deleteCell.html('<button onclick="doDelete(this.parentNode.parentNode)">Delete</button>');
 }
 
 function clearForm() {
-    $('input[name="id"]').val('');
-    $('input[name="name"]').val('');
-    $('input[name="ingredients"]').val('');
-    $('input[name="instructions"]').val('');
+    var form = $('#createUpdateForm');
+    form.find('input[name="id"]').val('');
+    form.find('input[name="name"]').val('');
+    form.find('input[name="ingredients"]').val('');
+    form.find('input[name="instructions"]').val('');
     showViewAll();
 }
 
@@ -108,10 +108,10 @@ function searchOnlineRecipes() {
         contentType: "application/json",
         data: JSON.stringify({ query: query }),
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             displaySearchResults(data);
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error("Error: " + status + ", Message: " + error);
         }
     });
@@ -119,9 +119,9 @@ function searchOnlineRecipes() {
 
 function displaySearchResults(recipes) {
     var searchResultsDiv = $('#searchResults');
-    searchResultsDiv.empty();
+    searchResultsDiv.html('');
 
-    recipes.forEach(function(recipe) {
+    recipes.forEach(function (recipe) {
         var recipeDiv = $('<div>');
         recipeDiv.html(`
             <p>Name: ${recipe.name}</p>
@@ -144,4 +144,13 @@ function addRecipeToMyRecipes(name, ingredients, instructions) {
         url: "/api/recipes",
         method: "POST",
         contentType: "application/json",
-        data:
+        data: JSON.stringify(recipe),
+        dataType: "json",
+        success: function () {
+            alert("Recipe added successfully");
+        },
+        error: function (xhr, status, error) {
+            console.error("Error: " + status + ", Message: " + error);
+        }
+    });
+}
