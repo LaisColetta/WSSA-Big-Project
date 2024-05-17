@@ -86,7 +86,7 @@ class RecipesDAO:
         return {colname: value for colname, value in zip(colnames, result)}
 
     def search_recipes_online(self, query):
-        app_key = cfg.SPOONACULAR_API_KEY
+        app_key = cfg.API_KEY
         url = f'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query={query}&apiKey={app_key}'
 
         response = requests.get(url)
