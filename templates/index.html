@@ -293,26 +293,30 @@
 		}
 
 		function searchOnlineRecipes() {
-			var query = document.getElementById('searchQuery').value.trim();
-			if (!query) {
+			var query = document.getElementById('searchQuery').value;
+			if (!query.trim()) {
 				alert("Please enter a search query.");
 				return;
 			}
 
 			$.ajax({
-				url: "/api/recipes/complexSearch",
-				method: "POST",
-				contentType: "application/json",
-				data: JSON.stringify({ query: query }),
-				dataType: "json",
+				url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch",
+				method: "GET",
+				headers: {
+					"X-RapidAPI-Key": "e00ca5d55b6742489e97763f21272962"
+				},
+				data: {
+					query: query
+				},
 				success: function (data) {
-					displaySearchResults(data);
+					displaySearchResults(data.results);
 				},
 				error: function (xhr, status, error) {
 					console.error("Error: " + status + ", Message: " + error);
 				}
 			});
 		}
+
 
 		function displaySearchResults(recipes) {
 			var searchResultsDiv = document.getElementById('searchResults');
