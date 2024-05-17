@@ -159,6 +159,7 @@
     <div class="container">
         <div class="white-box">
             <button id="showCreateButton" onclick="showCreate()">Add Recipe Manually</button>
+			
             <form id="searchForm">
                 <label for="searchQuery">Search for recipes online:</label>
                 <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter keyword...">
@@ -231,7 +232,7 @@
 			populateFormWithRecipe(recipe);
 		}
 
-		function doCreate() {
+	function doCreate() {
 			var form = document.getElementById('createUpdateForm');
 			var recipe = {
 				name: form.querySelector('input[name="name"]').value,
@@ -300,22 +301,20 @@
 			}
 
 			$.ajax({
-				url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch",
+				url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=" + encodeURIComponent(query),
 				method: "GET",
 				headers: {
 					"X-RapidAPI-Key": "e00ca5d55b6742489e97763f21272962"
-				},
-				data: {
-					query: query
 				},
 				success: function (data) {
 					displaySearchResults(data.results);
 				},
 				error: function (xhr, status, error) {
-					console.error("Error: " + status + ", Message: " + error);
+					var errorMessage = "Error: " + status + ", Message: " + error;
+					console.error(errorMessage);
+					alert("An error occurred while searching for recipes. Please try again later.");
 				}
 			});
-		}
 
 
 		function displaySearchResults(recipes) {
@@ -365,7 +364,7 @@
 
 		function getAllRecipesAjax() {
 			$.ajax({
-				url: "/api/recipes/complexSearch",
+				url: "https://api.spoonacular.com/recipes/complexSearch",
 				method: "GET",
 				dataType: "json",
 				success: function (recipes) {
@@ -374,14 +373,14 @@
 					});
 				},
 				error: function (xhr, status, error) {
-					console.error("Error in getAllRecipes function - Status:", status + ", Message:", error);
+					console.error("Error in getAllRecipes function - Status: " + status + ", Message: " + error);
 				}
 			});
-		}
+}
 
 		function createRecipeAjax(recipe) {
 			$.ajax({
-				url: "/api/recipes/complexSearch",
+				url: "https://api.spoonacular.com/recipes/complexSearch",
 				method: "POST",
 				contentType: "application/json",
 				data: JSON.stringify(recipe),
@@ -414,7 +413,7 @@
 
 		function deleteRecipeAjax(id) {
 			$.ajax({
-				url: "/api/complexSearch/" + id,
+				url: "https://api.spoonacular.com/recipes/complexSearch" + id,
 				method: "DELETE",
 				success: function () {
 					var rowElement = document.querySelector('#recipeTable tr[id="' + id + '"]');

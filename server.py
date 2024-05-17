@@ -71,7 +71,7 @@ def search_online_recipes():
         return jsonify({'error': 'Missing search query'}), 400
     
     api_key = cfg.SPOONACULAR_API_KEY
-    spoonacular_api_url = f'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query={query}&apiKey={api_key}'
+    spoonacular_api_url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={api_key}&query={query}&number=1'
     response = requests.get(spoonacular_api_url)
     if response.status_code == 200:
         recipes = response.json().get('results', [])
