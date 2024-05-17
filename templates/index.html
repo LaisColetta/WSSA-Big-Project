@@ -198,236 +198,246 @@
     </div>
 
     <script>
-		function showCreate() {
-			document.getElementById('showCreateButton').style.display = "none";
-			document.getElementById('recipeTable').style.display = "none";
-			document.getElementById('createUpdateForm').style.display = "block";
+        const API_KEY = "e00ca5d55b6742489e97763f21272962";
+        const API_URL = "https://api.spoonacular.com/recipes";
 
-			document.getElementById('createLabel').style.display = "inline";
-			document.getElementById('updateLabel').style.display = "none";
+        function showCreate() {
+            document.getElementById('showCreateButton').style.display = "none";
+            document.getElementById('recipeTable').style.display = "none";
+            document.getElementById('createUpdateForm').style.display = "block";
 
-			document.getElementById('doCreateButton').style.display = "block";
-			document.getElementById('doUpdateButton').style.display = "none";
-		}
+            document.getElementById('createLabel').style.display = "inline";
+            document.getElementById('updateLabel').style.display = "none";
 
-		function showViewAll() {
-			document.getElementById('showCreateButton').style.display = "block";
-			document.getElementById('recipeTable').style.display = "block";
-			document.getElementById('createUpdateForm').style.display = "none";
-		}
+            document.getElementById('doCreateButton').style.display = "block";
+            document.getElementById('doUpdateButton').style.display = "none";
+        }
 
-		function showUpdate(buttonElement) {
-			document.getElementById('showCreateButton').style.display = "none";
-			document.getElementById('recipeTable').style.display = "none";
-			document.getElementById('createUpdateForm').style.display = "block";
+        function showViewAll() {
+            document.getElementById('showCreateButton').style.display = "block";
+            document.getElementById('recipeTable').style.display = "block";
+            document.getElementById('createUpdateForm').style.display = "none";
+        }
 
-			document.getElementById('createLabel').style.display = "none";
-			document.getElementById('updateLabel').style.display = "inline";
+        function showUpdate(buttonElement) {
+            document.getElementById('showCreateButton').style.display = "none";
+            document.getElementById('recipeTable').style.display = "none";
+            document.getElementById('createUpdateForm').style.display = "block";
 
-			document.getElementById('doCreateButton').style.display = "none";
-			document.getElementById('doUpdateButton').style.display = "block";
+            document.getElementById('createLabel').style.display = "none";
+            document.getElementById('updateLabel').style.display = "inline";
 
-			var rowElement = buttonElement.parentNode.parentNode;
-			var recipe = getRecipeFromRow(rowElement);
-			populateFormWithRecipe(recipe);
-		}
+            document.getElementById('doCreateButton').style.display = "none";
+            document.getElementById('doUpdateButton').style.display = "block";
 
-	function doCreate() {
-			var form = document.getElementById('createUpdateForm');
-			var recipe = {
-				name: form.querySelector('input[name="name"]').value,
-				ingredients: form.querySelector('input[name="ingredients"]').value,
-				instructions: form.querySelector('input[name="instructions"]').value
-			};
-			createRecipeAjax(recipe);
-		}
+            var rowElement = buttonElement.parentNode.parentNode;
+            var recipe = getRecipeFromRow(rowElement);
+            populateFormWithRecipe(recipe);
+        }
 
-		function doUpdate() {
-			var form = document.getElementById('createUpdateForm');
-			var recipe = {
-				id: form.querySelector('input[name="id"]').value,
-				name: form.querySelector('input[name="name"]').value,
-				ingredients: form.querySelector('input[name="ingredients"]').value,
-				instructions: form.querySelector('input[name="instructions"]').value
-			};
-			updateRecipeAjax(recipe);
-		}
+        function doCreate() {
+            var form = document.getElementById('createUpdateForm');
+            var recipe = {
+                name: form.querySelector('input[name="name"]').value,
+                ingredients: form.querySelector('input[name="ingredients"]').value,
+                instructions: form.querySelector('input[name="instructions"]').value
+            };
+            createRecipeAjax(recipe);
+        }
 
-		function doDelete(rowElement) {
-			var tableElement = document.getElementById('recipeTable');
-			var index = rowElement.rowIndex;
-			var id = rowElement.cells[0].innerText; // Assuming ID is in the first column
-			deleteRecipeAjax(id);
-			tableElement.deleteRow(index);
-		}
+        function doUpdate() {
+            var form = document.getElementById('createUpdateForm');
+            var recipe = {
+                id: form.querySelector('input[name="id"]').value,
+                name: form.querySelector('input[name="name"]').value,
+                ingredients: form.querySelector('input[name="ingredients"]').value,
+                instructions: form.querySelector('input[name="instructions"]').value
+            };
+            updateRecipeAjax(recipe);
+        }
 
-		function addRecipeToTable(recipe) {
-			var tableElement = document.getElementById('recipeTable');
-			var rowElement = tableElement.insertRow(-1);
-			rowElement.insertCell(0).innerText = recipe.id;
-			rowElement.insertCell(1).innerText = recipe.name;
-			rowElement.insertCell(2).innerText = recipe.ingredients;
-			rowElement.insertCell(3).innerText = recipe.instructions;
-			var updateCell = rowElement.insertCell(4);
-			var deleteCell = rowElement.insertCell(5);
-			updateCell.innerHTML = '<button onclick="showUpdate(this)">Update</button>';
-			deleteCell.innerHTML = '<button onclick="doDelete(this.parentNode.parentNode)">Delete</button>';
-		}
+        function doDelete(rowElement) {
+            var id = rowElement.cells[0].innerText; // Assuming ID is in the first column
+            deleteRecipeAjax(id);
+        }
 
-		function clearForm() {
-			var form = document.getElementById('createUpdateForm');
-			form.querySelector('input[name="id"]').value = '';
-			form.querySelector('input[name="name"]').value = '';
-			form.querySelector('input[name="ingredients"]').value = '';
-			form.querySelector('input[name="instructions"]').value = '';
-			showViewAll();
-		}
+        function addRecipeToTable(recipe) {
+            var tableElement = document.getElementById('recipeTable').querySelector('tbody');
+            var rowElement = tableElement.insertRow(-1);
+            rowElement.insertCell(0).innerText = recipe.id;
+            rowElement.insertCell(1).innerText = recipe.name;
+            rowElement.insertCell(2).innerText = recipe.ingredients;
+            rowElement.insertCell(3).innerText = recipe.instructions;
+            var updateCell = rowElement.insertCell(4);
+            var deleteCell = rowElement.insertCell(5);
+            updateCell.innerHTML = '<button onclick="showUpdate(this)">Update</button>';
+            deleteCell.innerHTML = '<button onclick="doDelete(this.parentNode.parentNode)">Delete</button>';
+        }
 
-		function getRecipeFromRow(rowElement) {
-			var recipe = {
-				id: rowElement.cells[0].innerText,
-				name: rowElement.cells[1].innerText,
-				ingredients: rowElement.cells[2].innerText,
-				instructions: rowElement.cells[3].innerText
-			};
-			return recipe;
-		}
+        function clearForm() {
+            var form = document.getElementById('createUpdateForm');
+            form.querySelector('input[name="id"]').value = '';
+            form.querySelector('input[name="name"]').value = '';
+            form.querySelector('input[name="ingredients"]').value = '';
+            form.querySelector('input[name="instructions"]').value = '';
+            showViewAll();
+        }
 
-		function searchOnlineRecipes() {
-			var query = document.getElementById('searchQuery').value;
-			if (!query.trim()) {
-				alert("Please enter a search query.");
-				return;
-			}
+        function getRecipeFromRow(rowElement) {
+            return {
+                id: rowElement.cells[0].innerText,
+                name: rowElement.cells[1].innerText,
+                ingredients: rowElement.cells[2].innerText,
+                instructions: rowElement.cells[3].innerText
+            };
+        }
 
-			$.ajax({
-				url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=" + encodeURIComponent(query),
-				method: "GET",
-				headers: {
-					"X-RapidAPI-Key": "e00ca5d55b6742489e97763f21272962"
-				},
-				success: function (data) {
-					displaySearchResults(data.results);
-				},
-				error: function (xhr, status, error) {
-					var errorMessage = "Error: " + status + ", Message: " + error;
-					console.error(errorMessage);
-					alert("An error occurred while searching for recipes. Please try again later.");
-				}
-			});
+        function searchOnlineRecipes() {
+            var query = document.getElementById('searchQuery').value;
+            if (!query.trim()) {
+                alert("Please enter a search query.");
+                return;
+            }
 
+            $.ajax({
+                url: `${API_URL}/complexSearch`,
+                method: "GET",
+                headers: {
+                    "X-RapidAPI-Key": API_KEY
+                },
+                data: {
+                    query: query
+                },
+                success: function (data) {
+                    displaySearchResults(data.results);
+                },
+                error: function (xhr, status, error) {
+                    var errorMessage = "Error: " + status + ", Message: " + error;
+                    console.error(errorMessage);
+                    alert("An error occurred while searching for recipes. Please try again later.");
+                }
+            });
+        }
 
-		function displaySearchResults(recipes) {
-			var searchResultsDiv = document.getElementById('searchResults');
-			searchResultsDiv.innerHTML = '';
+        function displaySearchResults(recipes) {
+            var searchResultsDiv = document.getElementById('searchResults');
+            searchResultsDiv.innerHTML = '';
 
-			recipes.forEach(function (recipe) {
-				var recipeDiv = document.createElement('div');
-				recipeDiv.innerHTML = `
-					<p>Name: ${recipe.name}</p>
-					<p>Ingredients: ${recipe.ingredients}</p>
-					<p>Instructions: ${recipe.instructions}</p>
-					<button onclick="addRecipeToMyRecipes('${recipe.name}', '${recipe.ingredients}', '${recipe.instructions}')">Add to My Recipes</button>
-				`;
-				searchResultsDiv.appendChild(recipeDiv);
-			});
-		}
-		function addRecipeToMyRecipes(name, ingredients, instructions) {
-			var recipe = {
-				name: name,
-				ingredients: ingredients,
-				instructions: instructions
-			};
+            recipes.forEach(function (recipe) {
+                var recipeDiv = document.createElement('div');
+                recipeDiv.innerHTML = `
+                    <p>Name: ${recipe.title}</p>
+                    <p>Ingredients: ${recipe.ingredients}</p>
+                    <p>Instructions: ${recipe.instructions}</p>
+                    <button onclick="addRecipeToMyRecipes('${recipe.title}', '${recipe.ingredients}', '${recipe.instructions}')">Add to My Recipes</button>
+                `;
+                searchResultsDiv.appendChild(recipeDiv);
+            });
+        }
 
-			$.ajax({
-				url: "/api/complexSearch",
-				method: "POST",
-				contentType: "application/json",
-				data: JSON.stringify(recipe),
-				dataType: "json",
-				success: function () {
-					alert("Recipe added successfully");
-				},
-				error: function (xhr, status, error) {
-					console.error("Error: " + status + ", Message: " + error);
-				}
-			});
-		}
+        function addRecipeToMyRecipes(name, ingredients, instructions) {
+            var recipe = {
+                name: name,
+                ingredients: ingredients,
+                instructions: instructions
+            };
 
-		function populateFormWithRecipe(recipe) {
-			var form = document.getElementById('createUpdateForm');
-			form.querySelector('input[name="id"]').value = recipe.id;
-			form.querySelector('input[name="name"]').value = recipe.name;
-			form.querySelector('input[name="ingredients"]').value = recipe.ingredients;
-			form.querySelector('input[name="instructions"]').value = recipe.instructions;
-		}
+            $.ajax({
+                url: "/api/recipes",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(recipe),
+                dataType: "json",
+                success: function () {
+                    alert("Recipe added successfully");
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + status + ", Message: " + error);
+                }
+            });
+        }
 
-		function getAllRecipesAjax() {
-			$.ajax({
-				url: "https://api.spoonacular.com/recipes/complexSearch",
-				method: "GET",
-				dataType: "json",
-				success: function (recipes) {
-					recipes.forEach(function (recipe) {
-						addRecipeToTable(recipe);
-					});
-				},
-				error: function (xhr, status, error) {
-					console.error("Error in getAllRecipes function - Status: " + status + ", Message: " + error);
-				}
-			});
-}
+        function populateFormWithRecipe(recipe) {
+            var form = document.getElementById('createUpdateForm');
+            form.querySelector('input[name="id"]').value = recipe.id;
+            form.querySelector('input[name="name"]').value = recipe.name;
+            form.querySelector('input[name="ingredients"]').value = recipe.ingredients;
+            form.querySelector('input[name="instructions"]').value = recipe.instructions;
+        }
 
-		function createRecipeAjax(recipe) {
-			$.ajax({
-				url: "https://api.spoonacular.com/recipes/complexSearch",
-				method: "POST",
-				contentType: "application/json",
-				data: JSON.stringify(recipe),
-				dataType: "json",
-				success: function () {
-					alert("Recipe added successfully");
-					window.location.href = "/";
-				},
-				error: function (xhr, status, error) {
-					console.error("Error: " + status + ", Message: " + error);
-				}
-			});
-		}
+        function getAllRecipesAjax() {
+            $.ajax({
+                url: `${API_URL}/random?number=10`, // Adjust the endpoint if needed
+                method: "GET",
+                headers: {
+                    "X-RapidAPI-Key": API_KEY
+                },
+                success: function (response) {
+                    response.recipes.forEach(function (recipe) {
+                        addRecipeToTable({
+                            id: recipe.id,
+                            name: recipe.title,
+                            ingredients: recipe.extendedIngredients.map(ing => ing.original).join(', '),
+                            instructions: recipe.instructions
+                        });
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error in getAllRecipes function - Status: " + status + ", Message: " + error);
+                }
+            });
+        }
 
-		function updateRecipeAjax(recipe) {
-			$.ajax({
-				url: "/api/recipes/complexSearch" + recipe.id,
-				method: "PUT",
-				contentType: "application/json",
-				data: JSON.stringify(recipe),
-				success: function () {
-					alert("Recipe updated successfully");
-					window.location.href = "/";
-				},
-				error: function (xhr, status, error) {
-					console.error("Error: " + status + ", Message: " + error);
-				}
-			});
-		}
+        function createRecipeAjax(recipe) {
+            $.ajax({
+                url: "/api/recipes",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(recipe),
+                dataType: "json",
+                success: function () {
+                    alert("Recipe added successfully");
+                    window.location.href = "/";
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + status + ", Message: " + error);
+                }
+            });
+        }
 
-		function deleteRecipeAjax(id) {
-			$.ajax({
-				url: "https://api.spoonacular.com/recipes/complexSearch" + id,
-				method: "DELETE",
-				success: function () {
-					var rowElement = document.querySelector('#recipeTable tr[id="' + id + '"]');
-					rowElement.parentNode.removeChild(rowElement);
-				},
-				error: function (xhr, status, error) {
-					console.error("Error: " + status + ", Message: " + error);
-				}
-			});
-		}
+        function updateRecipeAjax(recipe) {
+            $.ajax({
+                url: "/api/recipes/" + recipe.id,
+                method: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(recipe),
+                success: function () {
+                    alert("Recipe updated successfully");
+                    window.location.href = "/";
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + status + ", Message: " + error);
+                }
+            });
+        }
 
-		getAllRecipesAjax();   
-	</script>
-	
+        function deleteRecipeAjax(id) {
+            $.ajax({
+                url: "/api/recipes/" + id,
+                method: "DELETE",
+                success: function () {
+                    var rowElement = document.querySelector('#recipeTable tr[id="' + id + '"]');
+                    if (rowElement) {
+                        rowElement.parentNode.removeChild(rowElement);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + status + ", Message: " + error);
+                }
+            });
+        }
+
+        getAllRecipesAjax();
+    </script>
 </body>
-
 </html>
