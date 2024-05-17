@@ -87,7 +87,7 @@ class RecipesDAO:
 
     def search_recipes_online(self, query):
         app_key = cfg.SPOONACULAR_API_KEY
-        url = f'https://api.spoonacular.com/recipes/complexSearch?query={query}&apiKey={app_key}'
+        url = f'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query={query}&apiKey={app_key}'
 
         response = requests.get(url)
         if response.status_code == 200:

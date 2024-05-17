@@ -158,8 +158,12 @@
 
     <div class="container">
         <div class="white-box">
-            <button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
-            <button id="searchButton" onclick="searchOnlineRecipes()">Search for recipes online</button>
+            <button id="showCreateButton" onclick="showCreate()">Add Recipe Manually</button>
+            <form id="searchForm">
+                <label for="searchQuery">Search for recipes online:</label>
+                <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter keyword...">
+                <button type="button" id="searchButton" onclick="searchOnlineRecipes()">Search</button>
+            </form>
 
             <table class="table" id="recipeTable">
                 <thead>
@@ -289,14 +293,14 @@
 		}
 
 		function searchOnlineRecipes() {
-			var query = document.getElementById('searchQuery').value;
-			if (!query.trim()) {
+			var query = document.getElementById('searchQuery').value.trim();
+			if (!query) {
 				alert("Please enter a search query.");
 				return;
 			}
 
 			$.ajax({
-				url: "/api/recipes/search",
+				url: "/api/recipes/complexSearch",
 				method: "POST",
 				contentType: "application/json",
 				data: JSON.stringify({ query: query }),
@@ -325,7 +329,6 @@
 				searchResultsDiv.appendChild(recipeDiv);
 			});
 		}
-
 		function addRecipeToMyRecipes(name, ingredients, instructions) {
 			var recipe = {
 				name: name,
@@ -334,7 +337,7 @@
 			};
 
 			$.ajax({
-				url: "/api/recipes",
+				url: "/api/complexSearch",
 				method: "POST",
 				contentType: "application/json",
 				data: JSON.stringify(recipe),
@@ -358,7 +361,7 @@
 
 		function getAllRecipesAjax() {
 			$.ajax({
-				url: "/api/recipes",
+				url: "/api/recipes/complexSearch",
 				method: "GET",
 				dataType: "json",
 				success: function (recipes) {
@@ -374,7 +377,7 @@
 
 		function createRecipeAjax(recipe) {
 			$.ajax({
-				url: "/api/recipes",
+				url: "/api/recipes/complexSearch",
 				method: "POST",
 				contentType: "application/json",
 				data: JSON.stringify(recipe),
@@ -391,7 +394,7 @@
 
 		function updateRecipeAjax(recipe) {
 			$.ajax({
-				url: "/api/recipes/" + recipe.id,
+				url: "/api/recipes/complexSearch" + recipe.id,
 				method: "PUT",
 				contentType: "application/json",
 				data: JSON.stringify(recipe),
@@ -407,7 +410,7 @@
 
 		function deleteRecipeAjax(id) {
 			$.ajax({
-				url: "/api/recipes/" + id,
+				url: "/api/complexSearch/" + id,
 				method: "DELETE",
 				success: function () {
 					var rowElement = document.querySelector('#recipeTable tr[id="' + id + '"]');
