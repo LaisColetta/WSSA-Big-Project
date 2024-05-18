@@ -168,42 +168,42 @@
 
             <div id="searchResults"></div>
 
-			<div class="white-box">
-				<button id="showCreateButton" onclick="showCreate()">Add Recipe</button>
-	
-				<table class="table" id="recipeTable">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Name</th>
-							<th>Ingredients</th>
-							<th>Instructions</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<!-- Table rows will be dynamically added here -->
-					</tbody>
-				</table>
-	
-				<div id='createUpdateForm'>
-					<h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
-					<input type="hidden" name="id" />
-					<p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
-					<p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
-					<p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
-					<button id="doCreateButton" onclick="doCreate()">Create</button>
-					<button id="doUpdateButton" onclick="doUpdate()">Update</button>
-					<button id="doCancelButton" onclick="clearForm()">Cancel</button>
-				</div>
-			</div>
-		</div>
-	</body>
-    <script>
-        const API_KEY = "e00ca5d55b6742489e97763f21272962";
-        const API_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch";
+            <table class="table" id="recipeTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Ingredients</th>
+                        <th>Instructions</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically added here -->
+                </tbody>
+            </table>
 
+            <div id="createUpdateForm">
+                <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
+                <input type="hidden" name="id" />
+                <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
+                <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
+                <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
+                <button id="doCreateButton" onclick="doCreate()">Create</button>
+                <button id="doUpdateButton" onclick="doUpdate()">Update</button>
+                <button id="doCancelButton" onclick="clearForm()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API ID and Key from the configuration file
+        const API_ID = cfg.API_ID; // Edamam API ID
+        const API_KEY = cfg.API_KEY; // Edamam API Key
+        const API_URL = `https://api.edamam.com/search`;
+
+        // Function to show the create form
         function showCreate() {
             document.getElementById('showCreateButton').style.display = "none";
             document.getElementById('recipeTable').style.display = "none";
@@ -216,12 +216,14 @@
             document.getElementById('doUpdateButton').style.display = "none";
         }
 
+        // Function to show the table view
         function showViewAll() {
             document.getElementById('showCreateButton').style.display = "block";
             document.getElementById('recipeTable').style.display = "block";
             document.getElementById('createUpdateForm').style.display = "none";
         }
 
+        // Function to show the update form
         function showUpdate(buttonElement) {
             document.getElementById('showCreateButton').style.display = "none";
             document.getElementById('recipeTable').style.display = "none";
@@ -238,209 +240,206 @@
             populateFormWithRecipe(recipe);
         }
 
-        function doCreate() {
-            var form = document.getElementById('createUpdateForm');
-            var recipe = {
-                name: form.querySelector('input[name="name"]').value,
-                ingredients: form.querySelector('input[name="ingredients"]').value,
-                instructions: form.querySelector('input[name="instructions"]').value
-            };
-            createRecipeAjax(recipe);
-        }
-
-        function doUpdate() {
-            var form = document.getElementById('createUpdateForm');
-            var recipe = {
-                id: form.querySelector('input[name="id"]').value,
-                name: form.querySelector('input[name="name"]').value,
-                ingredients: form.querySelector('input[name="ingredients"]').value,
-                instructions: form.querySelector('input[name="instructions"]').value
-            };
-            updateRecipeAjax(recipe);
-        }
-
-        function doDelete(rowElement) {
-            var id = rowElement.cells[0].innerText; 
-            deleteRecipeAjax(id);
-        }
-
-        function addRecipeToTable(recipe) {
-            var tableElement = document.getElementById('recipeTable').querySelector('tbody');
-            var rowElement = tableElement.insertRow(-1);
-            rowElement.insertCell(0).innerText = recipe.id;
-            rowElement.insertCell(1).innerText = recipe.name;
-            rowElement.insertCell(2).innerText = recipe.ingredients;
-            rowElement.insertCell(3).innerText = recipe.instructions;
-            var updateCell = rowElement.insertCell(4);
-            var deleteCell = rowElement.insertCell(5);
-            updateCell.innerHTML = '<button onclick="showUpdate(this)">Update</button>';
-            deleteCell.innerHTML = '<button onclick="doDelete(this.parentNode.parentNode)">Delete</button>';
-        }
-
+        // Function to clear the form and show the table view
         function clearForm() {
-            var form = document.getElementById('createUpdateForm');
-            form.querySelector('input[name="id"]').value = '';
-            form.querySelector('input[name="name"]').value = '';
-            form.querySelector('input[name="ingredients"]').value = '';
-            form.querySelector('input[name="instructions"]').value = '';
+            document.querySelector('#createUpdateForm input[name="id"]').value = "";
+            document.querySelector('#createUpdateForm input[name="name"]').value = "";
+            document.querySelector('#createUpdateForm input[name="ingredients"]').value = "";
+            document.querySelector('#createUpdateForm input[name="instructions"]').value = "";
             showViewAll();
         }
 
+        // Function to extract recipe data from a table row
         function getRecipeFromRow(rowElement) {
             return {
-                id: rowElement.cells[0].innerText,
-                name: rowElement.cells[1].innerText,
-                ingredients: rowElement.cells[2].innerText,
-                instructions: rowElement.cells[3].innerText
+                id: rowElement.children[0].innerText,
+                name: rowElement.children[1].innerText,
+                ingredients: rowElement.children[2].innerText,
+                instructions: rowElement.children[3].innerText,
             };
         }
 
-        function searchOnlineRecipes() {
-            var query = document.getElementById('searchQuery').value;
-            if (!query.trim()) {
-                alert("Please enter a search query.");
-                return;
-            }
-
-            $.ajax({
-                url: `${API_URL}`,
-                method: "GET",
-                headers: {
-                    "X-RapidAPI-Key": API_KEY
-                },
-                data: {
-                    query: query
-                },
-                success: function (data) {
-                    displaySearchResults(data.results);
-                },
-                error: function (xhr, status, error) {
-                    var errorMessage = "Error: " + status + ", Message: " + error;
-                    console.error(errorMessage);
-                    alert("An error occurred while searching for recipes. Please try again later.");
-                }
-            });
-        }
-
-        function displaySearchResults(recipes) {
-            var searchResultsDiv = document.getElementById('searchResults');
-            searchResultsDiv.innerHTML = '';
-
-            recipes.forEach(function (recipe) {
-                var recipeDiv = document.createElement('div');
-                recipeDiv.innerHTML = `
-                    <p>Name: ${recipe.title}</p>
-                    <p>Ingredients: ${recipe.ingredients}</p>
-                    <p>Instructions: ${recipe.instructions}</p>
-                    <button onclick="addRecipeToMyRecipes('${recipe.title}', '${recipe.ingredients}', '${recipe.instructions}')">Add to My Recipes</button>
-                `;
-                searchResultsDiv.appendChild(recipeDiv);
-            });
-        }
-
-        function addRecipeToMyRecipes(name, ingredients, instructions) {
-            var recipe = {
-                name: name,
-                ingredients: ingredients,
-                instructions: instructions
-            };
-
-            $.ajax({
-                url: `${API_URL}`,
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(recipe),
-                dataType: "json",
-                success: function () {
-                    alert("Recipe added successfully");
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error: " + status + ", Message: " + error);
-                }
-            });
-        }
-
+        // Function to populate the form with recipe data
         function populateFormWithRecipe(recipe) {
-            var form = document.getElementById('createUpdateForm');
-            form.querySelector('input[name="id"]').value = recipe.id;
-            form.querySelector('input[name="name"]').value = recipe.name;
-            form.querySelector('input[name="ingredients"]').value = recipe.ingredients;
-            form.querySelector('input[name="instructions"]').value = recipe.instructions;
+            document.querySelector('#createUpdateForm input[name="id"]').value = recipe.id;
+            document.querySelector('#createUpdateForm input[name="name"]').value = recipe.name;
+            document.querySelector('#createUpdateForm input[name="ingredients"]').value = recipe.ingredients;
+            document.querySelector('#createUpdateForm input[name="instructions"]').value = recipe.instructions;
         }
 
-        function getAllRecipesAjax() {
+        // Function to add a new recipe to the database
+        function doCreate() {
+            var recipe = {
+                name: document.querySelector('#createUpdateForm input[name="name"]').value,
+                ingredients: document.querySelector('#createUpdateForm input[name="ingredients"]').value,
+                instructions: document.querySelector('#createUpdateForm input[name="instructions"]').value,
+            };
+
             $.ajax({
-                url: `${API_URL}/random?number=10`, 
-                method: "GET",
-                headers: {
-                    "X-RapidAPI-Key": API_KEY
+                type: 'POST',
+                url: './add',
+                data: JSON.stringify(recipe),
+                contentType: 'application/json',
+                success: function () {
+                    alert('Recipe added successfully!');
+                    loadRecipes();
+                    clearForm();
                 },
-                success: function (response) {
-                    response.recipes.forEach(function (recipe) {
-                        addRecipeToTable({
-                            id: recipe.id,
-                            name: recipe.title,
-                            ingredients: recipe.extendedIngredients.map(ing => ing.original).join(', '),
-                            instructions: recipe.instructions
-                        });
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        // Function to update an existing recipe in the database
+        function doUpdate() {
+            var recipe = {
+                id: document.querySelector('#createUpdateForm input[name="id"]').value,
+                name: document.querySelector('#createUpdateForm input[name="name"]').value,
+                ingredients: document.querySelector('#createUpdateForm input[name="ingredients"]').value,
+                instructions: document.querySelector('#createUpdateForm input[name="instructions"]').value,
+            };
+
+            $.ajax({
+                type: 'PUT',
+                url: './update/' + recipe.id,
+                data: JSON.stringify(recipe),
+                contentType: 'application/json',
+                success: function () {
+                    alert('Recipe updated successfully!');
+                    loadRecipes();
+                    clearForm();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        // Function to delete a recipe from the database
+        function doDelete(buttonElement) {
+            var rowElement = buttonElement.parentNode.parentNode;
+            var idToDelete = rowElement.children[0].innerText;
+
+            $.ajax({
+                type: 'DELETE',
+                url: './delete/' + idToDelete,
+                success: function () {
+                    alert('Recipe deleted successfully!');
+                    loadRecipes();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        // Function to load all recipes from the database
+        function loadRecipes() {
+            $.ajax({
+                type: 'GET',
+                url: './view',
+                success: function (recipes) {
+                    var tableBodyElement = document.querySelector('#recipeTable tbody');
+                    while (tableBodyElement.firstChild) {
+                        tableBodyElement.removeChild(tableBodyElement.firstChild);
+                    }
+
+                    recipes.forEach(function (recipe) {
+                        var rowElement = document.createElement('tr');
+
+                        var idElement = document.createElement('td');
+                        idElement.innerText = recipe.id;
+                        rowElement.appendChild(idElement);
+
+                        var nameElement = document.createElement('td');
+                        nameElement.innerText = recipe.name;
+                        rowElement.appendChild(nameElement);
+
+                        var ingredientsElement = document.createElement('td');
+                        ingredientsElement.innerText = recipe.ingredients;
+                        rowElement.appendChild(ingredientsElement);
+
+                        var instructionsElement = document.createElement('td');
+                        instructionsElement.innerText = recipe.instructions;
+                        rowElement.appendChild(instructionsElement);
+
+                        var updateButtonCellElement = document.createElement('td');
+                        var updateButtonElement = document.createElement('button');
+                        updateButtonElement.innerText = "Update";
+                        updateButtonElement.onclick = function () { showUpdate(this); };
+                        updateButtonCellElement.appendChild(updateButtonElement);
+                        rowElement.appendChild(updateButtonCellElement);
+
+                        var deleteButtonCellElement = document.createElement('td');
+                        var deleteButtonElement = document.createElement('button');
+                        deleteButtonElement.innerText = "Delete";
+                        deleteButtonElement.onclick = function () { doDelete(this); };
+                        deleteButtonCellElement.appendChild(deleteButtonElement);
+                        rowElement.appendChild(deleteButtonCellElement);
+
+                        tableBodyElement.appendChild(rowElement);
                     });
                 },
                 error: function (xhr, status, error) {
-                    console.error("Error in getAllRecipes function - Status: " + status + ", Message: " + error);
+                    console.error(error);
                 }
             });
         }
 
-		function createRecipeAjax(recipe) {
-    		$.ajax({
-				url: "/api/recipes", 
-				method: "POST",
-				contentType: "application/json",
-				data: JSON.stringify(recipe),
-				dataType: "json",
-				success: function () {
-					alert("Recipe added successfully");
-					window.location.href = "/";  // Redirect to main page
-				},
-				error: function (xhr, status, error) {
-					console.error("Error: " + status + ", Message: " + error);
-				}
-			});
-		}
+        // Function to search for recipes online using Edamam API
+        function searchOnlineRecipes() {
+            var searchQuery = document.getElementById('searchQuery').value;
+            var searchResultsContainer = document.getElementById('searchResults');
 
-		function updateRecipeAjax(recipe) {
-				$.ajax({
-					url: "/api/recipes/" + recipe.id,
-					method: "PUT",
-					contentType: "application/json",
-					data: JSON.stringify(recipe),
-					success: function () {
-						alert("Recipe updated successfully");
-						window.location.href = "/";  // Redirect to main page
-					},
-					error: function (xhr, status, error) {
-						console.error("Error: " + status + ", Message: " + error);
-					}
-				});
-			}
+            searchResultsContainer.innerHTML = ""; // Clear previous results
 
-        function deleteRecipeAjax(id) {
             $.ajax({
-                url: "/api/recipes/" + id,
-                method: "DELETE",
-                success: function () {
-                    var rowElement = document.querySelector('#recipeTable tr[id="' + id + '"]');
-                    if (rowElement) {
-                        rowElement.parentNode.removeChild(rowElement);
+                type: 'GET',
+                url: `${API_URL}?q=${searchQuery}&app_id=${API_ID}&app_key=${API_KEY}`,
+                success: function (data) {
+                    var recipes = data.hits;
+                    if (recipes.length > 0) {
+                        recipes.forEach(function (hit) {
+                            var recipe = hit.recipe;
+
+                            var recipeElement = document.createElement('div');
+                            recipeElement.classList.add('recipe');
+
+                            var labelElement = document.createElement('h3');
+                            labelElement.innerText = recipe.label;
+                            recipeElement.appendChild(labelElement);
+
+                            var imageElement = document.createElement('img');
+                            imageElement.src = recipe.image;
+                            recipeElement.appendChild(imageElement);
+
+                            var ingredientsElement = document.createElement('p');
+                            ingredientsElement.innerText = "Ingredients: " + recipe.ingredientLines.join(", ");
+                            recipeElement.appendChild(ingredientsElement);
+
+                            var linkElement = document.createElement('a');
+                            linkElement.href = recipe.url;
+                            linkElement.innerText = "View full recipe";
+                            recipeElement.appendChild(linkElement);
+
+                            searchResultsContainer.appendChild(recipeElement);
+                        });
+                    } else {
+                        var noResultsElement = document.createElement('p');
+                        noResultsElement.innerText = "No recipes found.";
+                        searchResultsContainer.appendChild(noResultsElement);
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("Error: " + status + ", Message: " + error);
+                    console.error(error);
                 }
             });
         }
 
-        getAllRecipesAjax();
+        // Initial load of recipes from the database
+        loadRecipes();
     </script>
 </body>
+
 </html>

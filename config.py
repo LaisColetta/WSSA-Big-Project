@@ -4,5 +4,5 @@ class config:
     MYSQL_DATABASE_USER = 'lais'
     MYSQL_DATABASE_PASSWORD = 'recipe123'
     MYSQL_DATABASE_DB = 'lais$recipedb'
-    API_KEY = 'e00ca5d55b6742489e97763f21272962'
-    API_URL = 'https://api.spoonacular.com/recipes'
+    API_KEY = '67442644f15763961b1408291b163751'
+    API_ID = 'caa57a65'

@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, abort, redirect, url_for, request
 from recipesDAO import recipesDAO
 from config import config as cfg
-import requests
 import logging
 
 app = Flask(__name__)
@@ -70,18 +69,17 @@ def search_online_recipes():
     if not query:
         return jsonify({'error': 'Missing search query'}), 400
     
-    api_key = cfg.SPOONACULAR_API_KEY
-    spoonacular_api_url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={api_key}&query={query}&number=1'
-    response = requests.get(spoonacular_api_url)
-    if response.status_code == 200:
-        recipes = response.json().get('results', [])
+    api_response = recipesDAO.search_recipes_online(query)
+    if api_response:
+        recipes = api_response.get('hits', [])
         return jsonify(recipes)
     else:
-        logging.error(f"Failed to fetch recipes from Spoonacular: {response.status_code}")
-        return jsonify({'error': 'Failed to fetch recipes from Spoonacular'}), 500
-    
+        logging.error("Failed to fetch recipes from Edamam")
+        return jsonify({'error': 'Failed to fetch recipes from Edamam'}), 500
+
 @app.route('/api/recipes/add_online', methods=['POST'])
 def add_online_recipes():
+    logging.info("Accessing POST /api/recipes/add_online...")
     data = request.json
     query = data.get('query')
     if not query:
@@ -89,8 +87,9 @@ def add_online_recipes():
     
     try:
         recipesDAO.add_online_recipe(query)
-        return jsonify({'message': 'Recipes added successfully from Spoonacular'}), 201
+        return jsonify({'message': 'Recipes added successfully from Edamam'}), 201
     except Exception as e:
+        logging.error(f"Error adding recipes from Edamam: {e}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':

@@ -86,8 +86,9 @@ class RecipesDAO:
         return {colname: value for colname, value in zip(colnames, result)}
 
     def search_recipes_online(self, query):
-        app_key = cfg.API_KEY
-        url = f'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query={query}&apiKey={app_key}'
+        app_id = cfg.EDAMAM_API_ID
+        app_key = cfg.EDAMAM_API_KEY
+        url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
 
         response = requests.get(url)
         if response.status_code == 200:
@@ -95,6 +96,22 @@ class RecipesDAO:
         else:
             print(f"Error: {response.status_code}")
             return None
+
+    def extract_recipe_details(self, api_response):
+        recipes = []
+        for recipe_data in api_response.get('hits', []):
+            recipe_info = recipe_data.get('recipe', {})
+            
+            name = recipe_info.get('label', 'Name not available')
+            ingredients = ', '.join([ingredient['text'] for ingredient in recipe_info.get('ingredients', [])])
+            instructions = recipe_info.get('url', 'Instructions not available')
+            
+            recipes.append({
+                'name': name,
+                'ingredients': ingredients,
+                'instructions': instructions
+            })
+        return recipes
 
     def add_online_recipe(self, query):
         api_response = self.search_recipes_online(query)
@@ -105,27 +122,6 @@ class RecipesDAO:
                 print(f"Recipe {recipe['name']} added successfully!")
         else:
             print("No recipes found.")
-
-    def extract_recipe_details(self, api_response):
-        recipes = []
-        for recipe_data in api_response.get('results', []):
-            # Extract recipe name
-            name = recipe_data.get('title', 'Name not available')
-            
-            # Extract ingredients
-            ingredients = ', '.join([ingredient.get('name', 'Unknown Ingredient') for ingredient in recipe_data.get('extendedIngredients', [])])
-            
-            # Extract instructions
-            instructions = recipe_data.get('sourceUrl', 'Instructions not available')
-            
-            # Append the extracted recipe data to the recipes list
-            recipes.append({
-                'name': name,
-                'ingredients': ingredients,
-                'instructions': instructions
-            })
-        return recipes
-
 
     def __del__(self):
         if hasattr(self, 'cursor'):
