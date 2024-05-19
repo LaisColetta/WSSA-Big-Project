@@ -4,14 +4,17 @@ from config import config as cfg
 
 class RecipesDAO:
     def __init__(self): 
-        self.connection = mysql.connector.connect(
-            host=cfg.MYSQL_DATABASE_HOST,
-            user=cfg.MYSQL_DATABASE_USER,
-            password=cfg.MYSQL_DATABASE_PASSWORD,
-            database=cfg.MYSQL_DATABASE_DB
-        )
-        self.cursor = self.connection.cursor()
-        self.create_db_table()
+        try:
+            self.connection = mysql.connector.connect(
+                host=cfg.MYSQL_DATABASE_HOST,
+                user=cfg.MYSQL_DATABASE_USER,
+                password=cfg.MYSQL_DATABASE_PASSWORD,
+                database=cfg.MYSQL_DATABASE_DB
+            )
+            self.cursor = self.connection.cursor()
+            self.create_db_table()
+        except mysql.connector.Error as e:
+            print(f"Error connecting to the database: {e}")
 
     def create_db_table(self):
         try:
@@ -35,6 +38,7 @@ class RecipesDAO:
             return self.cursor.lastrowid
         except mysql.connector.Error as e:
             print(f"Error creating recipe: {e}")
+            self.connection.rollback()
             return None
 
     def get_all(self):
@@ -86,9 +90,7 @@ class RecipesDAO:
         return {colname: value for colname, value in zip(colnames, result)}
 
     def search_recipes_online(self, query):
-        app_id = cfg.EDAMAM_API_ID
-        app_key = cfg.EDAMAM_API_KEY
-        url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
+        url = f'https://api.edamam.com/search?q={query}&app_id={cfg.API_ID}&app_key={cfg.API_KEY}'
 
         response = requests.get(url)
         if response.status_code == 200:
@@ -124,9 +126,9 @@ class RecipesDAO:
             print("No recipes found.")
 
     def __del__(self):
-        if hasattr(self, 'cursor'):
+        if hasattr(self, 'cursor') and self.cursor:
             self.cursor.close()
-        if hasattr(self, 'connection'):
+        if hasattr(self, 'connection') and self.connection:
             self.connection.close()
 
 recipesDAO = RecipesDAO()

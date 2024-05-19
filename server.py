@@ -1,12 +1,21 @@
-from flask import Flask, render_template, jsonify, abort, redirect, url_for, request
+from flask import Flask, render_template, jsonify, abort, request
 from recipesDAO import recipesDAO
 from config import config as cfg
 import logging
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
+app.config.from_object(cfg)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
+
+@app.route('/api/config', methods=['GET'])
+def get_config():
+    return jsonify({
+        'API_URL': "https://api.edamam.com/search",
+        'API_ID': app.config['API_ID'],
+        'API_KEY': app.config['API_KEY']
+    })
 
 # Routes for web interface
 @app.route('/')
@@ -93,4 +102,4 @@ def add_online_recipes():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(threaded=False)
+    app.run(threaded=True)
