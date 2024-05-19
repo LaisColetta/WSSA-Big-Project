@@ -198,10 +198,6 @@
     </div>
 
     <script>
-        // API ID and Key from the configuration file
-        const API_ID = cfg.API_ID; // Edamam API ID
-        const API_KEY = cfg.API_KEY; // Edamam API Key
-        const API_URL = `https://api.edamam.com/search`;
 
         // Function to show the create form
         function showCreate() {
@@ -268,28 +264,34 @@
         }
 
         // Function to add a new recipe to the database
-        function doCreate() {
-            var recipe = {
-                name: document.querySelector('#createUpdateForm input[name="name"]').value,
-                ingredients: document.querySelector('#createUpdateForm input[name="ingredients"]').value,
-                instructions: document.querySelector('#createUpdateForm input[name="instructions"]').value,
-            };
+		function createRecipe() {
+			var form = document.getElementById('createUpdateForm');
+			var recipe = {
+				name: form.querySelector('input[name="name"]').value,
+				ingredients: form.querySelector('input[name="ingredients"]').value,
+				instructions: form.querySelector('input[name="instructions"]').value
+			};
 
-            $.ajax({
-                type: 'POST',
-                url: './add',
-                data: JSON.stringify(recipe),
-                contentType: 'application/json',
-                success: function () {
-                    alert('Recipe added successfully!');
-                    loadRecipes();
-                    clearForm();
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        }
+			$.ajax({
+				url: "/api/recipes",
+				method: "POST",
+				contentType: "application/json",
+				data: JSON.stringify(recipe),
+				dataType: "json",
+				success: function () {
+					alert("Recipe added successfully");
+					window.location.href = "/";  // Redirect to main page
+				},
+				error: function (xhr, status, error) {
+					console.error("Error: " + status + ", Message: " + error);
+				}
+			});
+		}
+
+		// Event listener for form submission
+		document.getElementById('createUpdateForm').addEventListener('submit', function(event) {
+			event.preventDefault(); // Prevent default form submission
+			createRecipe();
 
         // Function to update an existing recipe in the database
         function doUpdate() {
