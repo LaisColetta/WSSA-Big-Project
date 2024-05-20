@@ -40,6 +40,7 @@
             border-radius: 10px;
             max-width: 1400px;
             margin: 0 auto;
+            color: black;
         }
 
         /* Header Styles */
@@ -174,6 +175,8 @@
     <div class="container">
         <div class="white-box">
             <button id="showCreateButton" onclick="showCreate()">Add Recipe Manually</button>
+            <button id="viewSavedRecipesButton" onclick="viewSavedRecipes()">View saved recipes</button>
+
 
             <form id="searchForm">
                 <label for="searchQuery">Search for recipes online:</label>
@@ -231,6 +234,10 @@
             document.getElementById('showCreateButton').style.display = "block";
             document.getElementById('recipeTable').style.display = "block";
             document.getElementById('createUpdateForm').style.display = "none";
+        }
+
+        function viewSavedRecipes() {
+            window.location.href = "/";  // Redirect to main page
         }
 
         // Function to show the update form
