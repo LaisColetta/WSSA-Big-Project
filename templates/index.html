@@ -71,21 +71,6 @@
             background-color: #6a0000;
         }
 
-        #extractRecipeButton {
-            margin-top: 20px;
-            background-color: #8B0000;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        #extractRecipeButton:hover {
-            background-color: #6a0000;
-        }
-
         /* Table Styles */
         table {
             margin: 0 auto 20px auto;
@@ -174,7 +159,6 @@
     <div class="container">
         <div class="white-box">
             <button id="showCreateButton" onclick="showCreate()">Add Recipe Manually</button>
-            <button id="extractRecipeButton" onclick="extractRecipe()">Extract and Save Recipe</button>
 
             <form id="searchForm">
                 <label for="searchQuery">Search for recipes online:</label>
@@ -184,7 +168,7 @@
 
             <div id="searchResults"></div>
 
-            <table class="table" id="recipeTable">
+            <table class="table" id="recipeTable" style="display: none;">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -398,7 +382,6 @@
                 }
             });
         }
-
         // Function to search for recipes online using Edamam API
         async function searchOnlineRecipes() {
             var searchQuery = document.getElementById('searchQuery').value;
