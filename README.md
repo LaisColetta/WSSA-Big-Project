@@ -30,10 +30,10 @@ This is a Flask web application for managing recipes. It allows users to view, a
     pip install -r requirements.txt
     ```
 
-4. Set up the configuration file (`config.py`) and add your Spoonacular API key:
+4. Set up the configuration file (`config.py`) and add your Edamam API key:
 
     ```python
-    SPOONACULAR_API_KEY = 'your-spoonacular-api-key'
+    API_KEY = 'your-edamam-api-key'
     ```
 
 ## Usage
@@ -59,7 +59,7 @@ This application is also hosted on [PythonAnywhere](https://www.pythonanywhere.c
 3. Clone the repository into your PythonAnywhere account:
 
     ```bash
-    git clone https://github.com/your-username/recipe-management.git
+    git clone https://github.com/LaisColetta/WSSA-Big-Project.git
     ```
 
 4. Navigate to the project directory:
@@ -71,7 +71,7 @@ This application is also hosted on [PythonAnywhere](https://www.pythonanywhere.c
 5. Set up the configuration file (`config.py`) and add your Spoonacular API key:
 
     ```python
-    SPOONACULAR_API_KEY = 'your-spoonacular-api-key'
+    API_KEY = 'your-edamam-api-key'
     ```
 
 6. Run the Flask application:
