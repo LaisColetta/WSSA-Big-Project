@@ -148,54 +148,73 @@
         #searchButton:hover {
             background-color: #6a0000;
         }
+
+        #searchForm {
+            color: black;
+        }
+
+        #searchForm label {
+            color: black;
+        }
+
+        #searchForm input[type="text"] {
+            color: black;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
     </style>
 </head>
 
-<body>
-    <header>
-        <h1>My Food Canvas</h1>
-    </header>
+    <body>
+        <header>
+            <h1>My Food Canvas</h1>
+        </header>
 
-    <div class="container">
-        <div class="white-box">
-            <button id="showCreateButton" onclick="showCreate()">Add Recipe Manually</button>
+        <div class="container">
+            <div class="white-box">
+                <button id="showCreateButton" onclick="showCreate()">Add Recipe Manually</button>
+                <button id="showSearchButton" onclick="showSearchForm()">Search Recipe Online</button>
+                <button id="showViewButton" onclick="showViewRecipes()">View Recipes</button>
 
-            <form id="searchForm">
-                <label for="searchQuery">Search for recipes online:</label>
-                <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter keyword...">
-                <button type="button" id="searchButton" onclick="searchOnlineRecipes()">Search</button>
-            </form>
+                <!-- Form for searching recipe online -->
+                <form id="searchForm" style="display: none;">
+                    <label for="searchQuery">Search for recipes online:</label>
+                    <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter keyword...">
+                    <button type="button" id="searchButton" onclick="searchOnlineRecipes()">Search</button>
+                    <button type="button" id="backToMainButton" onclick="goBackToMainPage()">Back to Main Page</button>
+                </form>
 
-            <div id="searchResults"></div>
+                <!-- Table to display recipes -->
+                <table class="table" id="recipeTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Ingredients</th>
+                            <th>Instructions</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
 
-            <table class="table" id="recipeTable" style="display: none;">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Ingredients</th>
-                        <th>Instructions</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Table rows will be dynamically added here -->
-                </tbody>
-            </table>
-
-            <div id="createUpdateForm">
-                <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
-                <input type="hidden" name="id" />
-                <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
-                <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
-                <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
-                <button id="doCreateButton" onclick="doCreate()">Create</button>
-                <button id="doUpdateButton" onclick="doUpdate()">Update</button>
-                <button id="doCancelButton" onclick="clearForm()">Cancel</button>
+                <!-- Form to add or update recipe -->
+                <div id="createUpdateForm" style="display: none;">
+                    <h2><span id="createLabel">Add</span> <span id="updateLabel">Update</span> Recipe</h2>
+                    <input type="hidden" name="id" />
+                    <p><label for="name">Name:</label> <input type="text" id="name" name="name" /></p>
+                    <p><label for="ingredients">Ingredients:</label> <input type="text" id="ingredients" name="ingredients" /></p>
+                    <p><label for="instructions">Instructions:</label> <input type="text" id="instructions" name="instructions" /></p>
+                    <button id="doCreateButton" onclick="doCreate()">Create</button>
+                    <button id="doUpdateButton" onclick="doUpdate()">Update</button>
+                    <button id="doCancelButton" onclick="clearForm()">Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
+    </body>
 
     <script>
         // Function to show the create form
@@ -253,6 +272,10 @@
                 instructions: rowElement.children[3].innerText,
             };
         }
+
+        // Function to go back to the main page
+        function goBackToMainPage() {
+            window.location.href = "/";
 
         // Function to populate the form with recipe data
         function populateFormWithRecipe(recipe) {
