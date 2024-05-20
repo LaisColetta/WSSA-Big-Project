@@ -1,30 +1,21 @@
-# My Food Canvas
+# Recipe Management Web Application
 
-This recipe manager called 'My Food Canvas' is a web application designed to help users to create their own cookbook and where they can also explore new recipes. Users can add, view, update, delete, search and save recipes both locally and online using the Edamam API. The application uses a MySQL database to store recipe information and provides a user-friendly interface for interaction.
-
-This project is part of the course Web Services and Application from the ATU college winter 2024, Ireland, lectured by Andre Beatty. 
+This is a Flask web application for managing recipes. It allows users to view, add, update, and delete recipes through both a web interface and a RESTful API.
 
 ## Features
 
-- View a list of all recipes saved by the user.
-- User can add a new recipe by adding the name, ingredients and instructions.
+- View a list of all recipes.
+- Add a new recipe.
 - Update an existing recipe.
 - Delete a recipe.
 - Search for recipes online using the Spoonacular API and add them to the database.
-
-## Resources used
-- Backend: Flask (Python web framework)
-- Frontend: HTML, JavaScript, and jQuery
-- Database: MySQL
-- External API: Edamam API for online recipe search
 
 ## Installation
 
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/yourusername/recipe-manager.git
-    cd recipe-manager
+    git clone https://github.com/your-username/recipe-management.git
     ```
 
 2. Navigate to the project directory:
@@ -99,11 +90,5 @@ This application is also hosted on [PythonAnywhere](https://www.pythonanywhere.c
 - `PUT /api/recipes/{recipe_id}`: Update an existing recipe.
 - `DELETE /api/recipes/{recipe_id}`: Delete a recipe.
 - `POST /api/recipes/search`: Search for recipes online and add them to the database.
-
-  source: Edamam API Documentation - https://developer.edamam.com/edamam-docs-recipe-api
-
-## EDAMAM API
-
-The recipes contained in the Recipe Search API EDAMAM are web recipes. These are recipes collected from throughout the internet. Therefore, they do not hold the copyrights to these recipes and do not provide the cooking instructionsonly the url to the source recipe. 
 
 
