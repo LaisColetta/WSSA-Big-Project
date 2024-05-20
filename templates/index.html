@@ -87,6 +87,20 @@
             background-color: #6a0000;
         }
 
+        .save-recipe {
+            margin-top: 20px;
+            background-color: #8B0000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .save-recipe:hover {
+            background-color: #6a0000; 
+        }
+
         /* Table Styles */
         table {
             margin: 0 auto 20px auto;
@@ -451,16 +465,12 @@
                                 recipeElement.appendChild(linkElement);
 
                                 var saveButtonElement = document.createElement('button');
-                                saveButtonElement.innerText = "Save Recipe";
+                                saveButtonElement.classList.add('save-recipe');
                                 saveButtonElement.onclick = function() { saveRecipeToDatabase(recipe); };
                                 recipeElement.appendChild(saveButtonElement);
 
                                 searchResultsContainer.appendChild(recipeElement);
                             });
-                        } else {
-                            var noResultsElement = document.createElement('p');
-                            noResultsElement.innerText = "No recipes found.";
-                            searchResultsContainer.appendChild(noResultsElement);
                         }
                     },
                     error: function (xhr, status, error) {
