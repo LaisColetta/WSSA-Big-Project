@@ -1,27 +1,38 @@
-# Recipe Management Web Application
+![food](https://shapeyourfutureok.com/wp-content/uploads/2018/10/25698-TSET-19-04-SYF-Website-Refresh_Header_5FoodGroups_F.jpg)
 
-This is a Flask web application for managing recipes. It allows users to view, add, update, and delete recipes through both a web interface and a RESTful API.
+# My Food Canvas
+
+The Recipe Manager is a web application designed to help users manage and explore recipes. Users can add, view, update, delete, and search for recipes both locally and online using the Edamam API. The application leverages a MySQL database to store recipe information and provides a user-friendly interface for interaction.
+This is a project for the Web Services and Application module part of the Higher Diploma in Data Analytics at the ATU College. The lecturer of this module is Andrew Beatty.
 
 ## Features
 
-- View a list of all recipes.
-- Add a new recipe.
-- Update an existing recipe.
-- Delete a recipe.
-- Search for recipes online using the Spoonacular API and add them to the database.
+- Add Recipes: Users can add new recipes to the local database.
+- View Recipes: Users can view all recipes stored in the local database.
+- Update Recipes: Users can update existing recipes.
+- Delete Recipes: Users can delete recipes from the local database.
+- Search Recipes Online: Users can search for recipes online using the Edamam API.
+- Add Online Recipes: Users can add recipes found online directly to the local database.
 
-## Installation
+## Technologies Used
+
+- Backend: Flask (Python web framework)
+- Frontend: HTML, JavaScript, and jQuery
+- Database: MySQL
+- External API: Edamam API for online recipe search
+
+## Installation and Setup
 
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/your-username/recipe-management.git
+    git clone [https://github.com/your-username/recipe-management.git](https://github.com/LaisColetta/WSSA-Big-Project.git)
     ```
 
-2. Navigate to the project directory:
+2. Set Up the Virtual Environment:
 
-    ```bash
-    cd recipe-management
+    ```python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
 3. Install the required dependencies:
@@ -33,8 +44,25 @@ This is a Flask web application for managing recipes. It allows users to view, a
 4. Set up the configuration file (`config.py`) and add your Edamam API key:
 
     ```python
+    class config:
+    DEBUG = True
+    MYSQL_DATABASE_HOST = 'your-database-host'
+    MYSQL_DATABASE_USER = 'your-database-user'
+    MYSQL_DATABASE_PASSWORD = 'your-database-password'
+    MYSQL_DATABASE_DB = 'your-database-name'
     API_KEY = 'your-edamam-api-key'
+    API_ID = 'your-edamam-api-id'
     ```
+5. Initialize the Database
+
+Ensure the database schema is created by running the application once. The RecipesDAO class will automatically create the necessary table.
+
+6. Run the Application
+
+```bash
+flask run
+```
+Access the application at http://127.0.0.1:5000/.
 
 ## Usage
 
@@ -84,11 +112,29 @@ This application is also hosted on [PythonAnywhere](https://www.pythonanywhere.c
 
 ## API Endpoints
 
-- `GET /api/recipes`: Get all recipes.
-- `GET /api/recipes/{recipe_id}`: Get a specific recipe by ID.
-- `POST /api/recipes`: Create a new recipe.
-- `PUT /api/recipes/{recipe_id}`: Update an existing recipe.
-- `DELETE /api/recipes/{recipe_id}`: Delete a recipe.
-- `POST /api/recipes/search`: Search for recipes online and add them to the database.
+- GET /api/config: Retrieve API configuration details.
+- GET /api/recipes: Get all recipes.
+- POST /api/recipes: Add a new recipe.
+- GET /api/recipes/int:recipe_id: Get a specific recipe by ID.
+- PUT /api/recipes/int:recipe_id: Update a recipe by ID.
+- DELETE /api/recipes/int:recipe_id: Delete a recipe by ID.
+- POST /api/recipes/search: Search for recipes online.
+- POST /api/recipes/add_online: Add online recipes to the local database.
+
+## File Structure
+
+├── app.py
+
+├── config.py
+
+├── recipesDAO.py
+
+├── templates/
+
+│└── index.html
+
+├── requirements.txt
+
+└── README.md
 
 
