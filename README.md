@@ -3,7 +3,7 @@
 # My Food Canvas
 
 The Recipe Manager is a web application designed to help users manage and explore recipes. Users can add, view, update, delete, and search for recipes both locally and online using the Edamam API. The application leverages a MySQL database to store recipe information and provides a user-friendly interface for interaction.
-This is a project for the Web Services and Application module part of the Higher Diploma in Data Analytics at the ATU College. The lecturer of this module is Andrew Beatty.
+This is a project for the Web Services and Application module part of the Higher Diploma in Data Analytics at ATU College. The lecturer of this module is Andrew Beatty.
 
 ## Features
 
@@ -26,7 +26,7 @@ This is a project for the Web Services and Application module part of the Higher
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone [https://github.com/your-username/recipe-management.git](https://github.com/LaisColetta/WSSA-Big-Project.git)
+    git clone https://github.com/LaisColetta/WSSA-Big-Project.git
     ```
 
 2. Set Up the Virtual Environment:
