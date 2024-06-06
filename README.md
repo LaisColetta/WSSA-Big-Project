@@ -46,12 +46,12 @@ This is a project for the Web Services and Application module part of the Higher
     ```python
     class config:
     DEBUG = True
-    MYSQL_DATABASE_HOST = 'your-database-host'
-    MYSQL_DATABASE_USER = 'your-database-user'
-    MYSQL_DATABASE_PASSWORD = 'your-database-password'
-    MYSQL_DATABASE_DB = 'your-database-name'
-    API_KEY = 'your-edamam-api-key'
-    API_ID = 'your-edamam-api-id'
+    MYSQL_DATABASE_HOST = 'lais.mysql.pythonanywhere-services.com'
+    MYSQL_DATABASE_USER = 'lais'
+    MYSQL_DATABASE_PASSWORD = 'recipe123'
+    MYSQL_DATABASE_DB = 'lais$recipedb'
+    API_KEY = '67442644f15763961b1408291b163751'
+    API_ID = 'caa57a65'
     ```
 5. Initialize the Database
 
@@ -80,7 +80,7 @@ Access the application at http://127.0.0.1:5000/.
 
 This application is also hosted on [PythonAnywhere](https://www.pythonanywhere.com/). You can access the online server by following these steps:
 
-1. Visit the [PythonAnywhere](https://www.pythonanywhere.com/) website and sign up for an account if you don't have one already.
+1. Visit the [PythonAnywhere](http://lais.pythonanywhere.com/) website and sign up for an account if you don't have one already.
 
 2. Once logged in, navigate to the Dashboard and open a Bash console.
 
@@ -93,13 +93,13 @@ This application is also hosted on [PythonAnywhere](https://www.pythonanywhere.c
 4. Navigate to the project directory:
 
     ```bash
-    cd recipe-management
+    cd WSSA-Big-Project
     ```
 
-5. Set up the configuration file (`config.py`) and add your Spoonacular API key:
+5. Set up the configuration file (`config.py`) and add your Edamam API key:
 
     ```python
-    API_KEY = 'your-edamam-api-key'
+    API_KEY = '67442644f15763961b1408291b163751'
     ```
 
 6. Run the Flask application:
