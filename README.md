@@ -69,7 +69,7 @@ Access the application at http://127.0.0.1:5000/.
 1. Run the Flask application locally:
 
     ```bash
-    python app.py
+    python server.py
     ```
 
 2. Access the application in your web browser at `http://localhost:5000`.
